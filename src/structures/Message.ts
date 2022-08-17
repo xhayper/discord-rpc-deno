@@ -1,4 +1,8 @@
-import Payload from "https://unpkg.com/discord-api-types@0.37.2/payloads/v10/index.d.ts";
+import {
+  APIEmbed,
+  APIAttachment,
+  MessageType,
+} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";
@@ -53,11 +57,11 @@ export class Message extends Base {
   /**
    * any embedded content
    */
-  embeds: Payload.APIEmbed[];
+  embeds: APIEmbed[];
   /**
    * any attached files
    */
-  attachments: Payload.APIAttachment[];
+  attachments: APIAttachment[];
   /**
    * the author of this message
    */
@@ -69,7 +73,7 @@ export class Message extends Base {
   /**
    * [type of message](https://discord.com/developers/docs/resources/channel#message-object-message-types)
    */
-  type: Payload.MessageType;
+  type: MessageType;
 
   constructor(client: Client, props: any) {
     super(client);

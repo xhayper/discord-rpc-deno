@@ -4,6 +4,7 @@
     <h3>discord-rpc-deno</h3>
     <br />
     <p>
+        <a href="https://deno.land/x/discord_rpc_deno"><img src="https://img.shields.io/npm/v/@xhayper/discord-rpc?color=blue&label=deno&logo=deno" alt="deno" /></a>
         <a href="https://discord.com/invite/xTAR8nUs2g" target="_blank"><img src="https://img.shields.io/discord/965168309731487805.svg" alt="discord"/></a>
         <a href="https://github.com/xhayper/discord-rpc/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/xhayper/discord-rpc.svg" alt="license"/></a>
     </p>
@@ -14,10 +15,12 @@
 
 `discord-rpc-deno` is a port of [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc) to deno.
 
+Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
+
 ## Example
 
 ```ts
-import { Client } from "https://raw.githubusercontent.com/xhayper/discord-rpc-deno/main/src/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.2-beta/src/mod.ts";
 
 const client = new Client({
     clientId: "123456789012345678"

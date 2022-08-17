@@ -1,4 +1,4 @@
-import { GatewayVoiceState } from "https://unpkg.com/discord-api-types@0.37.2/payloads/v10/index.d.ts";
+import { GatewayVoiceState } from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";

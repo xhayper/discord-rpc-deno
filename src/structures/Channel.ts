@@ -1,4 +1,7 @@
-import Payload from "https://unpkg.com/discord-api-types@0.37.2/payloads/v10/index.d.ts";
+import {
+  ChannelType,
+  GatewayVoiceState,
+} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { Message } from "./Message.ts";
@@ -19,7 +22,7 @@ export class Channel extends Base {
   /**
    * channel type (guild text: 0, guild voice: 2, dm: 1, group dm: 3)
    */
-  type: Payload.ChannelType;
+  type: ChannelType;
   /**
    * (text) channel topic
    */
@@ -39,7 +42,7 @@ export class Channel extends Base {
   /**
    * (voice) channel's voice states
    */
-  voice_states?: Payload.GatewayVoiceState[];
+  voice_states?: GatewayVoiceState[];
   /**
    * (text) channel's messages
    */

@@ -1,4 +1,7 @@
-import Payload from "https://unpkg.com/discord-api-types@0.37.2/payloads/v10/index.d.ts";
+import {
+  GatewayActivityButton,
+  ActivityType,
+} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
@@ -22,7 +25,7 @@ export type SetActivity = {
   joinSecret?: string;
   spectateSecret?: string;
   instance?: boolean;
-  buttons?: Array<Payload.GatewayActivityButton>;
+  buttons?: Array<GatewayActivityButton>;
 };
 
 export type SetActivityResponse = {
@@ -30,7 +33,7 @@ export type SetActivityResponse = {
   buttons?: string[];
   name: string;
   application_id: string;
-  type: Payload.ActivityType;
+  type: ActivityType;
   metadata: {
     button_urls?: string[];
   };

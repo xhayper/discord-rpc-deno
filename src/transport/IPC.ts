@@ -1,7 +1,6 @@
 import { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts";
 import * as fs from "https://deno.land/std@0.152.0/node/fs.ts";
 import * as net from "https://deno.land/std@0.152.0/node/net.ts";
-import * as os from "https://deno.land/std@0.152.0/node/os.ts";
 import * as path from "https://deno.land/std@0.152.0/node/path.ts";
 import { Transport, TransportOptions } from "../structures/Transport.ts";
 
@@ -25,14 +24,14 @@ const defaultPathList: FormatFunction[] = [
   (id: number): [string, boolean] => {
     // Windows path
 
-    const isWindows = os.platform() === "win32";
+    const isWindows = Deno.build.os === "windows";
 
     return [isWindows ? `\\\\?\\pipe\\discord-ipc-${id}` : "", isWindows];
   },
   (id: number): [string] => {
     // macOS/Linux path
 
-    if (os.platform() === "win32") return [""];
+    if (Deno.build.os === "windows") return [""];
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
@@ -44,7 +43,7 @@ const defaultPathList: FormatFunction[] = [
   (id: number): [string] => {
     // Snap path
 
-    if (os.platform() === "win32") return [""];
+    if (Deno.build.os === "windows") return [""];
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
@@ -56,7 +55,7 @@ const defaultPathList: FormatFunction[] = [
   (id: number): [string] => {
     // Alternative snap path
 
-    if (os.platform() === "win32") return [""];
+    if (Deno.build.os === "windows") return [""];
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
