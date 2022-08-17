@@ -17,7 +17,7 @@
 ## Example
 
 ```ts
-import { Client } from "@xhayper/discord-rpc";
+import { Client } from "https://raw.githubusercontent.com/xhayper/discord-rpc-deno/main/src/mod.ts";
 
 const client = new Client({
     clientId: "123456789012345678"
