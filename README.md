@@ -1,7 +1,7 @@
 <!-- markdownlint-disable -->
 <div align="center">
     <br />
-    <h3>discord-rpc-deno</h3>
+    <h3>discord_rpc_deno</h3>
     <br />
     <p>
         <a href="https://deno.land/x/discord_rpc_deno"><img src="https://img.shields.io/npm/v/@xhayper/discord-rpc?color=blue&label=deno&logo=deno" alt="deno" /></a>
@@ -13,7 +13,7 @@
 
 ## About
 
-`discord-rpc-deno` is a port of [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc) to deno.
+`discord_rpc_deno` is a port of [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc) to deno.
 
 Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
 
