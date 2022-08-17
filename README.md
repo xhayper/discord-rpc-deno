@@ -4,7 +4,7 @@
     <h3>discord_rpc_deno</h3>
     <br />
     <p>
-        <a href="https://deno.land/x/discord_rpc_deno"><img src="https://img.shields.io/npm/v/@xhayper/discord-rpc?color=blue&label=deno&logo=deno" alt="deno" /></a>
+        <a href="https://deno.land/x/discord_rpc_deno"><img src="https://img.shields.io/github/v/release/xhayper/discord-rpc-deno?include_prereleases&label=deno&logo=deno" alt="deno"/></a>
         <a href="https://discord.com/invite/xTAR8nUs2g" target="_blank"><img src="https://img.shields.io/discord/965168309731487805.svg" alt="discord"/></a>
         <a href="https://github.com/xhayper/discord-rpc/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/xhayper/discord-rpc.svg" alt="license"/></a>
     </p>
