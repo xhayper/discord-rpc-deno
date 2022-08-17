@@ -4,7 +4,7 @@ import { IAxiodResponse } from "https://deno.land/x/axiod@0.26.1/interfaces.ts";
 import {
   APIApplication,
   OAuth2Scopes,
-} from "https://unpkg.com/discord-api-types@0.37.2/v10.d.ts";
+} from "https://deno.land/x/discord_api_types@0.37.2/v10.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
 import {
   CommandIncoming,
@@ -120,7 +120,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
    */
   origin: string = "https://localhost";
 
-  private refrestTimeout?: NodeJS.Timer;
+  private refrestTimeout?: number;
   private connectionPromise?: Promise<void>;
   private _nonceMap = new Map<
     string,
