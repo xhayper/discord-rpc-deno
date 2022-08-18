@@ -1,6 +1,4 @@
 import { EventEmitter } from "https://deno.land/std@0.152.0/node/events.ts";
-import axiod from "https://deno.land/x/axiod@0.26.1/mod.ts";
-import { IAxiodResponse } from "https://deno.land/x/axiod@0.26.1/interfaces.ts";
 import {
   APIApplication,
   OAuth2Scopes,
@@ -193,24 +191,26 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   /**
    * @hidden
    */
-  async fetch<R = any>(
+  async fetch(
     method: string,
     path: string,
-    requst?: { data?: any; query?: string; headers?: any }
-  ): Promise<IAxiodResponse<R>> {
-    return await axiod.request({
-      method,
-      url: `https://discord.com/api${path}${
+    requst?: { body?: BodyInit; query?: string; headers?: HeadersInit }
+  ): Promise<Response> {
+    return await fetch(
+      `https://discord.com/api${path}${
         requst?.query ? new URLSearchParams(requst?.query) : ""
       }`,
-      data: requst?.data,
-      headers: {
-        ...(requst?.headers ?? {}),
-        ...(this.accessToken
-          ? { Authorization: `${this.tokenType} ${this.accessToken}` }
-          : {}),
-      },
-    });
+      {
+        method,
+        body: requst?.body,
+        headers: {
+          ...(requst?.headers ?? {}),
+          ...(this.accessToken
+            ? { Authorization: `${this.tokenType} ${this.accessToken}` }
+            : {}),
+        },
+      }
+    );
   }
 
   /**
@@ -248,16 +248,16 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
     if (this.debug) console.log("CLIENT | Refreshing access token!");
 
     this.hanleAccessTokenResponse(
-      (
+      await (
         await this.fetch("POST", "/oauth2/token", {
-          data: new URLSearchParams({
+          body: new URLSearchParams({
             client_id: this.clientId,
             client_secret: this.clientSecret ?? "",
             grant_type: "refresh_token",
             refresh_token: this.refreshToken ?? "",
           }),
         })
-      ).data
+      ).json()
     );
   }
 
@@ -277,13 +277,15 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
 
     if (options.useRPCToken) {
       rpcToken = (
-        await this.fetch("POST", "/oauth2/token/rpc", {
-          data: new URLSearchParams({
-            client_id: this.clientId,
-            client_secret: this.clientSecret ?? "",
-          }),
-        })
-      ).data.rpc_token;
+        await (
+          await this.fetch("POST", "/oauth2/token/rpc", {
+            body: new URLSearchParams({
+              client_id: this.clientId,
+              client_secret: this.clientSecret ?? "",
+            }),
+          })
+        ).json()
+      ).rpc_token;
     }
 
     const { code } = (
@@ -297,9 +299,9 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
     ).data;
 
     this.hanleAccessTokenResponse(
-      (
+      await (
         await this.fetch("POST", "/oauth2/token", {
-          data: new URLSearchParams({
+          body: new URLSearchParams({
             client_id: this.clientId,
             client_secret: this.clientSecret ?? "",
             redirect_uri: options.redirect_uri ?? "",
@@ -307,7 +309,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
             code,
           }),
         })
-      ).data
+      ).json()
     );
   }
 
