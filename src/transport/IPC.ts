@@ -1,8 +1,5 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
-import { Buffer } from "../deps.ts";
-import { path } from "../deps.ts";
-import { fs } from "../deps.ts";
-import { net } from "../deps.ts";
+import { Buffer, path, fs, net } from "../../deps.ts";
 import { Transport, TransportOptions } from "../structures/Transport.ts";
 
 export enum IPC_OPCODE {
