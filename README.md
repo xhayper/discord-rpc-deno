@@ -20,7 +20,7 @@ Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhay
 ## Example
 
 ```ts
-import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.3-beta/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.4-beta/mod.ts";
 
 const client = new Client({
     clientId: "123456789012345678"
