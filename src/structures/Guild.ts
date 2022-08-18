@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";

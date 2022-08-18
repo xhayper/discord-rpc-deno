@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 // import { StandardWebSocketClient } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
 import { Transport } from "../structures/Transport.ts";
 
@@ -64,7 +65,7 @@ export class WebSocketTransport extends Transport {
     // });
   }
 
-  send(data?: object | undefined): void {
+  send(_data?: any): void {
     throw new Error("WebSocketTransport.send() is not implemented");
 
     // this.ws?.send(JSON.stringify(data));
