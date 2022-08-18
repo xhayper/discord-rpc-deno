@@ -4,7 +4,7 @@ import {
   UserPremiumType,
   PresenceUpdateStatus,
   GatewayActivity,
-} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
+} from "../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 

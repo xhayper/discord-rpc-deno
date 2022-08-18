@@ -1,8 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import {
-  GatewayActivityButton,
-  ActivityType,
-} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
+import { GatewayActivityButton, ActivityType } from "../deps.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
