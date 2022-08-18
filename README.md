@@ -24,7 +24,7 @@ Looking for NodeJS version? Check
 ## Example
 
 ```ts
-import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.5-beta/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.6-beta/mod.ts";
 
 const client = new Client({
   clientId: "123456789012345678",
