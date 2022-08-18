@@ -1,8 +1,8 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
-import { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts"; //​TODO: Stop using node!
-import * as path from "https://deno.land/std@0.151.0/path/mod.ts";
-import * as fs from "https://deno.land/std@0.152.0/fs/mod.ts";
-import * as net from "https://deno.land/std@0.152.0/node/net.ts"; //​TODO: Stop using node!
+import { Buffer } from "../deps.ts";
+import { path } from "../deps.ts";
+import { fs } from "../deps.ts";
+import { net } from "../deps.ts";
 import { Transport, TransportOptions } from "../structures/Transport.ts";
 
 export enum IPC_OPCODE {

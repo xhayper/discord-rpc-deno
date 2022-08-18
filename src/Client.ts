@@ -1,9 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
-import { EventEmitter } from "https://deno.land/std@0.152.0/node/events.ts"; //​TODO: Stop using node!
-import {
-  APIApplication,
-  OAuth2Scopes,
-} from "https://deno.land/x/discord_api_types@0.37.2/v10.ts";
+import { EventEmitter } from "./deps.ts";
+import { APIApplication, OAuth2Scopes } from "./deps.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
 import {
   CommandIncoming,

@@ -1,9 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import {
-  APIEmbed,
-  APIAttachment,
-  MessageType,
-} from "https://deno.land/x/discord_api_types@0.37.2/payloads/v10/mod.ts";
+import { APIEmbed, APIAttachment, MessageType } from "../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";
