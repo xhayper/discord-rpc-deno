@@ -75,7 +75,7 @@ export class Message extends Base {
    */
   type: MessageType;
 
-  constructor(client: Client, props: any) {
+  constructor(client: Client, props: Record<string, any>) {
     super(client);
     Object.assign(this, props);
 
