@@ -1,6 +1,7 @@
+// deno-lint-ignore-file no-explicit-any
 export interface TypedEmitter<
   eventName extends {
-    [eventName: string]: (...args: unknown[]) => void;
+    [eventName: string]: (...args: any[]) => void;
   }
 > {
   addListener<E extends keyof eventName>(

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
 import { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts";
 import * as fs from "https://deno.land/std@0.152.0/node/fs.ts";
 import * as net from "https://deno.land/std@0.152.0/node/net.ts";

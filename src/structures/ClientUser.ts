@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import {
   GatewayActivityButton,
   ActivityType,
@@ -264,7 +265,7 @@ export class ClientUser extends User {
     activity: SetActivity,
     pid?: number
   ): Promise<SetActivityResponse> {
-    let formattedAcitivity: any = {
+    const formattedAcitivity: any = {
       ...activity,
       assets: {},
       timestamps: {},
