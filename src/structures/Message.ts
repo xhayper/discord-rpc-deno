@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { APIEmbed, APIAttachment, MessageType } from "../../deps.ts";
+import { APIAttachment, APIEmbed, MessageType } from "../../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";
@@ -87,7 +87,7 @@ export class Message extends Base {
     this.timestamp = props.timestamp;
     this.tts = props.tts;
     this.mentions = props.mentions.map(
-      (mentionData: any) => new User(client, mentionData)
+      (mentionData: any) => new User(client, mentionData),
     );
     this.mention_everyone = props.mention_everyone;
     this.mention_roles = props.mention_roles;

@@ -1,9 +1,9 @@
 // deno-lint-ignore-file no-explicit-any
 import {
+  GatewayActivity,
+  PresenceUpdateStatus,
   UserFlags,
   UserPremiumType,
-  PresenceUpdateStatus,
-  GatewayActivity,
 } from "../../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
@@ -43,9 +43,9 @@ export class User extends Base {
    */
   presence?:
     | {
-        status?: PresenceUpdateStatus;
-        activities?: GatewayActivity[];
-      }
+      status?: PresenceUpdateStatus;
+      activities?: GatewayActivity[];
+    }
     | undefined;
 
   avatar_decoration?: string | null;
@@ -68,8 +68,8 @@ export class User extends Base {
     const isAnimated = this.avatar && this.avatar.startsWith("a_");
     return this.avatar
       ? `${this.client.cdnHost}/avatars/${this.id}/${this.avatar}${
-          isAnimated ? ".gif" : ".png"
-        }`
+        isAnimated ? ".gif" : ".png"
+      }`
       : this.defaultAvatarUrl;
   }
 

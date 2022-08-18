@@ -13,9 +13,11 @@
 
 ## About
 
-`discord_rpc_deno` is a port of [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc) to deno.
+`discord_rpc_deno` is a port of
+[@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc) to deno.
 
-Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
+Looking for NodeJS version? Check
+[@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
 
 - NOTE: Require `--unstable --allow-net`!
 
@@ -25,13 +27,13 @@ Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhay
 import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.5-beta/mod.ts";
 
 const client = new Client({
-    clientId: "123456789012345678"
+  clientId: "123456789012345678",
 });
 
 client.on("ready", () => {
-    client.user?.setActivity({
-        state: "Hello, world!"
-    });
+  client.user?.setActivity({
+    state: "Hello, world!",
+  });
 });
 
 client.login();
@@ -54,7 +56,13 @@ client.login();
 
 ## Credits
 
-- [discordjs](https://github.com/discordjs): Making [discordjs/RPC](https://github.com/discordjs/RPC)
-- [JakeMakesStuff](https://github.com/JakeMakesStuff): [Snap Support](https://github.com/discordjs/RPC/pull/152)
-- [Snazzah](https://github.com/Snazzah): [Snap Support](https://github.com/Snazzah/SublimeDiscordRP/blob/c13e60cdbc5de8147881bb232f2339722c2b46b4/discord_ipc/__init__.py#L208)
-- [leonardssh](https://github.com/leonardssh): Making [coc-discord-rpc](https://github.com/leonardssh/coc-discord-rpc) which inspried me to make this package due to how old [discordjs/RPC](https://github.com/discordjs/RPC) is
+- [discordjs](https://github.com/discordjs): Making
+  [discordjs/RPC](https://github.com/discordjs/RPC)
+- [JakeMakesStuff](https://github.com/JakeMakesStuff):
+  [Snap Support](https://github.com/discordjs/RPC/pull/152)
+- [Snazzah](https://github.com/Snazzah):
+  [Snap Support](https://github.com/Snazzah/SublimeDiscordRP/blob/c13e60cdbc5de8147881bb232f2339722c2b46b4/discord_ipc/__init__.py#L208)
+- [leonardssh](https://github.com/leonardssh): Making
+  [coc-discord-rpc](https://github.com/leonardssh/coc-discord-rpc) which
+  inspried me to make this package due to how old
+  [discordjs/RPC](https://github.com/discordjs/RPC) is

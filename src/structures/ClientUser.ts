@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { GatewayActivityButton, ActivityType } from "../../deps.ts";
+import { ActivityType, GatewayActivityButton } from "../../deps.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
@@ -43,7 +43,7 @@ export class ClientUser extends User {
   async fetchUser(userId: string): Promise<User> {
     return new User(
       this.client,
-      (await this.client.requestWithError("GET_USER", { id: userId })).data
+      (await this.client.requestWithError("GET_USER", { id: userId })).data,
     );
   }
 
@@ -62,7 +62,7 @@ export class ClientUser extends User {
           guild_id: guildId,
           timeout,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -72,7 +72,7 @@ export class ClientUser extends User {
    */
   async fetchGuilds(): Promise<Guild[]> {
     return (await this.client.requestWithError("GET_GUILDS")).data.guilds.map(
-      (guildData: any) => new Guild(this.client, guildData)
+      (guildData: any) => new Guild(this.client, guildData),
     );
   }
 
@@ -88,7 +88,7 @@ export class ClientUser extends User {
         await this.client.requestWithError("GET_CHANNEL", {
           channel_id: channelId,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -101,7 +101,7 @@ export class ClientUser extends User {
     return (
       await this.client.requestWithError("GET_CHANNELS", { guild_id: guildId })
     ).data.channels.map(
-      (channelData: any) => new Channel(this.client, channelData)
+      (channelData: any) => new Channel(this.client, channelData),
     );
   }
 
@@ -111,7 +111,7 @@ export class ClientUser extends User {
    */
   async getSelectedVoiceChannel(): Promise<Channel | null> {
     const response = await this.client.requestWithError(
-      "GET_SELECTED_VOICE_CHANNEL"
+      "GET_SELECTED_VOICE_CHANNEL",
     );
     return response.data != null
       ? new Channel(this.client, response.data)
@@ -128,7 +128,7 @@ export class ClientUser extends User {
   async selectVoiceChannel(
     channelId: string,
     timeout?: number,
-    force?: boolean
+    force?: boolean,
   ): Promise<Channel> {
     return new Channel(
       this.client,
@@ -138,7 +138,7 @@ export class ClientUser extends User {
           timeout,
           force,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -162,7 +162,7 @@ export class ClientUser extends User {
   async getVoiceSettings(): Promise<VoiceSettings> {
     return new VoiceSettings(
       this.client,
-      (await this.client.requestWithError("GET_VOICE_SETTINGS")).data
+      (await this.client.requestWithError("GET_VOICE_SETTINGS")).data,
     );
   }
 
@@ -172,13 +172,13 @@ export class ClientUser extends User {
    * @returns the settings that have been set
    */
   async setVoiceSettings(
-    voiceSettings: Partial<VoiceSettings>
+    voiceSettings: Partial<VoiceSettings>,
   ): Promise<VoiceSettings> {
     return new VoiceSettings(
       this.client,
       (
         await this.client.requestWithError("SET_VOICE_SETTINGS", voiceSettings)
-      ).data
+      ).data,
     );
   }
 
@@ -219,7 +219,7 @@ export class ClientUser extends User {
    */
   async selectTextChannel(
     channelId: string,
-    timeout?: number
+    timeout?: number,
   ): Promise<Channel | null> {
     return new Channel(
       this.client,
@@ -228,7 +228,7 @@ export class ClientUser extends User {
           channel_id: channelId,
           timeout,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -260,7 +260,7 @@ export class ClientUser extends User {
    */
   async setActivity(
     activity: SetActivity,
-    pid?: number
+    pid?: number,
   ): Promise<SetActivityResponse> {
     const formattedAcitivity: any = {
       ...activity,
@@ -272,7 +272,7 @@ export class ClientUser extends User {
 
     if (activity.startTimestamp instanceof Date) {
       formattedAcitivity.timestamps.start = Math.round(
-        activity.startTimestamp.getTime()
+        activity.startTimestamp.getTime(),
       );
     } else if (typeof activity.startTimestamp === "number") {
       formattedAcitivity.timestamps.start = activity.startTimestamp;
@@ -280,40 +280,52 @@ export class ClientUser extends User {
 
     if (activity.endTimestamp instanceof Date) {
       formattedAcitivity.timestamps.end = Math.round(
-        activity.endTimestamp.getTime()
+        activity.endTimestamp.getTime(),
       );
     } else if (typeof activity.endTimestamp === "number") {
       formattedAcitivity.timestamps.end = activity.endTimestamp;
     }
 
-    if (activity.largeImageKey)
+    if (activity.largeImageKey) {
       formattedAcitivity.assets.large_image = activity.largeImageKey;
-    if (activity.smallImageKey)
+    }
+    if (activity.smallImageKey) {
       formattedAcitivity.assets.small_image = activity.smallImageKey;
-    if (activity.largeImageText)
+    }
+    if (activity.largeImageText) {
       formattedAcitivity.assets.large_text = activity.largeImageText;
-    if (activity.smallImageText)
+    }
+    if (activity.smallImageText) {
       formattedAcitivity.assets.small_text = activity.smallImageText;
+    }
 
     if (activity.partyId) formattedAcitivity.party.id = activity.partyId;
-    if (activity.partySize && activity.partyMax)
+    if (activity.partySize && activity.partyMax) {
       formattedAcitivity.party.size = [activity.partySize, activity.partyMax];
+    }
 
-    if (activity.joinSecret)
+    if (activity.joinSecret) {
       formattedAcitivity.secrets.join = activity.joinSecret;
-    if (activity.spectateSecret)
+    }
+    if (activity.spectateSecret) {
       formattedAcitivity.secrets.spectate = activity.spectateSecret;
-    if (activity.matchSecret)
+    }
+    if (activity.matchSecret) {
       formattedAcitivity.secrets.match = activity.matchSecret;
+    }
 
-    if (Object.keys(formattedAcitivity.assets).length === 0)
+    if (Object.keys(formattedAcitivity.assets).length === 0) {
       delete formattedAcitivity["assets"];
-    if (Object.keys(formattedAcitivity.timestamps).length === 0)
+    }
+    if (Object.keys(formattedAcitivity.timestamps).length === 0) {
       delete formattedAcitivity["timestamps"];
-    if (Object.keys(formattedAcitivity.party).length === 0)
+    }
+    if (Object.keys(formattedAcitivity.party).length === 0) {
       delete formattedAcitivity["party"];
-    if (Object.keys(formattedAcitivity.secrets).length === 0)
+    }
+    if (Object.keys(formattedAcitivity.secrets).length === 0) {
       delete formattedAcitivity["secrets"];
+    }
 
     formattedAcitivity.instance = !!activity.instance;
 
@@ -365,7 +377,7 @@ export class ClientUser extends User {
     type: LobbyType,
     capacity?: number,
     locked?: boolean,
-    metadata?: any
+    metadata?: any,
   ): Promise<Lobby> {
     return new Lobby(
       this.client,
@@ -376,7 +388,7 @@ export class ClientUser extends User {
           locked,
           metadata,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -394,7 +406,7 @@ export class ClientUser extends User {
           id: lobbyId,
           secret,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -412,7 +424,7 @@ export class ClientUser extends User {
           lobby_id: lobbyId,
           data,
         })
-      ).data
+      ).data,
     );
   }
 
@@ -426,7 +438,7 @@ export class ClientUser extends User {
   async getImage(
     userId: string,
     format: "png" | "webp" | "jpg" = "png",
-    size: 16 | 32 | 64 | 128 | 256 | 512 | 1024 = 1024
+    size: 16 | 32 | 64 | 128 | 256 | 512 | 1024 = 1024,
   ): Promise<string> {
     return (
       await this.client.requestWithError("GET_IMAGE", {

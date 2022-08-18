@@ -7,26 +7,24 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the bug** A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**To Reproduce** Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Expected behavior** A clear and concise description of what you expected to
+happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots** If applicable, add screenshots to help explain your problem.
 
 **(please complete the following information):**
- - OS: [e.g. Windows, macOS, Arch Linux]
- - OS Version: [e.g. Windows 11, macOS 12.5]
- - Discord Version: [e.g. Stable 140355)
 
-**Additional context**
-Add any other context about the problem here.
+- OS: [e.g. Windows, macOS, Arch Linux]
+- OS Version: [e.g. Windows 11, macOS 12.5]
+- Discord Version: [e.g. Stable 140355)
+
+**Additional context** Add any other context about the problem here.

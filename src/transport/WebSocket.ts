@@ -9,9 +9,9 @@ export class WebSocketTransport extends Transport {
       for (let i = 0; i < 10; i++) {
         const ws = await new Promise<WebSocket>((resolve, reject) => {
           const socket = new WebSocket(
-            `ws://127.0.0.1:${6463 + i}/?v=1&client_id=${
-              this.client.clientId
-            }&encoding=json`
+            `ws://127.0.0.1:${
+              6463 + i
+            }/?v=1&client_id=${this.client.clientId}&encoding=json`,
           );
 
           socket.onopen = () => {
