@@ -1,6 +1,6 @@
 export interface TypedEmitter<
   eventName extends {
-    [eventName: string]: (...args: any[]) => void;
+    [eventName: string]: (...args: unknown[]) => void;
   }
 > {
   addListener<E extends keyof eventName>(

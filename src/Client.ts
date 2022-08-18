@@ -112,11 +112,11 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   /**
    * @hidden
    */
-  cdnHost: string = "https://cdn.discordapp.com";
+  cdnHost = "https://cdn.discordapp.com";
   /**
    * @hidden
    */
-  origin: string = "https://localhost";
+  origin = "https://localhost";
 
   private refrestTimeout?: number;
   private connectionPromise?: Promise<void>;
@@ -216,7 +216,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   /**
    * @hidden
    */
-  async request<A = any, D = any>(
+  request<A = any, D = any>(
     cmd: RPC_CMD,
     args?: any,
     evt?: RPC_EVT
@@ -339,7 +339,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   /**
    * connect to the local rpc server
    */
-  async connect(): Promise<void> {
+  connect(): Promise<void> {
     if (this.connectionPromise) return this.connectionPromise;
 
     this.connectionPromise = new Promise((resolve, reject) => {
@@ -353,7 +353,6 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
           ),
         10e3
       );
-      // timeout.unref();
 
       this.once("connected", () => {
         clearTimeout(timeout);
