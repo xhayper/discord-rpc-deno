@@ -11,7 +11,7 @@ export enum IPC_OPCODE {
 }
 
 export type FormatFunction = (
-  id: number
+  id: number,
 ) => [path: string, skipCheck?: boolean];
 
 export type IPCTransportOptions = {
@@ -34,7 +34,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [path.join(prefix, `discord-ipc-${id}`)];
   },
@@ -46,7 +46,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [path.join(prefix, "snap.discord", `discord-ipc-${id}`)];
   },
@@ -58,7 +58,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [
       path.join(prefix, "app", "com.discordapp.Discord", `discord-ipc-${id}`),
@@ -108,7 +108,7 @@ export class IPCTransport extends Transport {
         };
 
         const handleSocketId = async (
-          id: number
+          id: number,
         ): Promise<net.Socket | null> => {
           const [socketPath, skipCheck] = formatFunc(id);
 
@@ -155,7 +155,7 @@ export class IPCTransport extends Transport {
         v: 1,
         client_id: this.client.clientId,
       },
-      IPC_OPCODE.HANDSHAKE
+      IPC_OPCODE.HANDSHAKE,
     );
 
     let chunk: Buffer | null;
@@ -176,13 +176,11 @@ export class IPCTransport extends Transport {
 
       if (this.client.debug) {
         console.log(
-          `SERVER => CLIENT | Recieved ${
-            data.length
-          } bytes, missing ${sizeRemaining} bytes, left over ${
+          `SERVER => CLIENT | Recieved ${data.length} bytes, missing ${sizeRemaining} bytes, left over ${
             remainingData?.length ?? 0
-          } bytes | Whole packet length: ${
-            wholeData.length
-          }, Required packet length: ${length + 8}`
+          } bytes | Whole packet length: ${wholeData.length}, Required packet length: ${
+            length + 8
+          }`,
         );
       }
 
@@ -203,7 +201,7 @@ export class IPCTransport extends Transport {
       if (this.client.debug) {
         console.debug(
           `SERVER => CLIENT | OPCODE.${IPC_OPCODE[packet.op]} |`,
-          packet.data
+          packet.data,
         );
       }
 
