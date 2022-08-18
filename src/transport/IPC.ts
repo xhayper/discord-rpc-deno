@@ -233,8 +233,13 @@ export class IPCTransport extends Transport {
   send(message?: any, op: IPC_OPCODE = IPC_OPCODE.FRAME): void {
     if (this.client.debug) {
       this.client.logger.debug(
-        `| [CLIENT] => [SERVER] | OPCODE.${IPC_OPCODE[op]}`,
-        message,
+        `| [CLIENT] => [SERVER] | OPCODE.${IPC_OPCODE[op]} | ${
+          JSON.stringify(
+            message,
+            null,
+            2,
+          )
+        }`,
       );
     }
 
