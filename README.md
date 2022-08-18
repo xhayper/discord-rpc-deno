@@ -17,6 +17,8 @@
 
 Looking for NodeJS version? Check [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
 
+- NOTE: Require `--unstable --allow-net`!
+
 ## Example
 
 ```ts
