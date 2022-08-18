@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { EventEmitter } from "https://deno.land/std@0.152.0/node/events.ts";
+import { EventEmitter } from "https://deno.land/std@0.152.0/node/events.ts"; //​TODO: Stop using node!
 import { Client } from "../Client.ts";
 import { TypedEmitter } from "../utils/TypedEmitter.ts";
 

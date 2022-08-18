@@ -1,8 +1,8 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
-import { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts";
-import * as fs from "https://deno.land/std@0.152.0/node/fs.ts";
-import * as net from "https://deno.land/std@0.152.0/node/net.ts";
-import * as path from "https://deno.land/std@0.152.0/node/path.ts";
+import { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts"; //​TODO: Stop using node!
+import * as path from "https://deno.land/std@0.151.0/path/mod.ts";
+import * as fs from "https://deno.land/std@0.152.0/fs/mod.ts";
+import * as net from "https://deno.land/std@0.152.0/node/net.ts"; //​TODO: Stop using node!
 import { Transport, TransportOptions } from "../structures/Transport.ts";
 
 export enum IPC_OPCODE {
@@ -36,7 +36,7 @@ const defaultPathList: FormatFunction[] = [
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
-    const prefix = fs.realpathSync(
+    const prefix = Deno.realPathSync(
       XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
     );
     return [path.join(prefix, `discord-ipc-${id}`)];
@@ -48,7 +48,7 @@ const defaultPathList: FormatFunction[] = [
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
-    const prefix = fs.realpathSync(
+    const prefix = Deno.realPathSync(
       XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
     );
     return [path.join(prefix, "snap.discord", `discord-ipc-${id}`)];
@@ -60,7 +60,7 @@ const defaultPathList: FormatFunction[] = [
 
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
-    const prefix = fs.realpathSync(
+    const prefix = Deno.realPathSync(
       XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
     );
     return [
