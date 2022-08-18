@@ -1,4 +1,4 @@
-import { grantOrThrow } from "https://deno.land/std@0.152.0/permissions/mod.ts";
+import { grantOrThrow } from "./deps.ts";
 grantOrThrow({ name: "read" }, { name: "write" }, { name: "env" });
 
 export * from "./src/Client.ts";
