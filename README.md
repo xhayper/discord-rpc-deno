@@ -19,7 +19,7 @@
 Looking for NodeJS version? Check
 [@xhayper/discord-rpc](https://github.com/xhayper/discord-rpc)!
 
-- NOTE: Require `--unstable --allow-net`!
+NOTE: Require `--unstable --allow-read --allow-env --allow-write --allow-net`!
 
 ## Example
 

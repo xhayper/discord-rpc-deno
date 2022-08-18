@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { APIApplication, EventEmitter, OAuth2Scopes } from "../deps.ts";
+import { log } from "../deps.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
 import {
   CommandIncoming,
@@ -69,8 +70,19 @@ export type ClientEvents = {
   disconnected: () => void;
 };
 
-export class Client
-  extends (EventEmitter as new () => TypedEmitter<ClientEvents>) {
+await log.setup({
+  handlers: {
+    console: new log.handlers.ConsoleHandler("DEBUG"),
+  },
+  loggers: {
+    discord_rpc_deno: {
+      level: "ERROR",
+      handlers: ["console"],
+    },
+  },
+});
+
+export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents>) {
   /**
    * application id
    */
@@ -97,6 +109,11 @@ export class Client
    * debug mode
    */
   readonly debug: boolean;
+
+  /**
+   * logger
+   */
+  readonly logger: log.Logger = log.getLogger("discord_rpc_deno");
 
   /**
    * current user
@@ -132,17 +149,19 @@ export class Client
     this.instanceId = options.instanceId;
 
     this.debug = !!options.debug; // Funky Javascript :)
+    if (this.debug) this.logger.level = 10;
 
-    this.transport = options.transport &&
-        options.transport.type &&
-        options.transport.type != "ipc"
-      ? options.transport.type === "websocket"
-        ? new WebSocketTransport({ client: this })
-        : new options.transport.type({ client: this })
-      : new IPCTransport({
-        client: this,
-        pathList: options.transport?.pathList,
-      });
+    this.transport =
+      options.transport &&
+      options.transport.type &&
+      options.transport.type != "ipc"
+        ? options.transport.type === "websocket"
+          ? new WebSocketTransport({ client: this })
+          : new options.transport.type({ client: this })
+        : new IPCTransport({
+            client: this,
+            pathList: options.transport?.pathList,
+          });
 
     this.transport.on("message", (message) => {
       if (message.cmd === "DISPATCH" && message.evt === "READY") {
@@ -174,7 +193,7 @@ export class Client
   async requestWithError<A = any, D = any>(
     cmd: RPC_CMD,
     args?: any,
-    evt?: RPC_EVT,
+    evt?: RPC_EVT
   ): Promise<CommandIncoming<A, D>> {
     const response = await this.request<A, D>(cmd, args, evt);
 
@@ -191,7 +210,7 @@ export class Client
   async fetch(
     method: string,
     path: string,
-    requst?: { body?: BodyInit; query?: string; headers?: HeadersInit },
+    requst?: { body?: BodyInit; query?: string; headers?: HeadersInit }
   ): Promise<Response> {
     return await fetch(
       `https://discord.com/api${path}${
@@ -206,7 +225,7 @@ export class Client
             ? { Authorization: `${this.tokenType} ${this.accessToken}` }
             : {}),
         },
-      },
+      }
     );
   }
 
@@ -216,7 +235,7 @@ export class Client
   request<A = any, D = any>(
     cmd: RPC_CMD,
     args?: any,
-    evt?: RPC_EVT,
+    evt?: RPC_EVT
   ): Promise<CommandIncoming<A, D>> {
     return new Promise((resolve, reject) => {
       const nonce = crypto.randomUUID();
@@ -242,7 +261,7 @@ export class Client
   }
 
   private async refreshAccessToken(): Promise<void> {
-    if (this.debug) console.log("CLIENT | Refreshing access token!");
+    if (this.debug) this.logger.info("| [CLIENT] | Refreshing access token!");
 
     this.hanleAccessTokenResponse(
       await (
@@ -254,7 +273,7 @@ export class Client
             refresh_token: this.refreshToken ?? "",
           }),
         })
-      ).json(),
+      ).json()
     );
   }
 
@@ -265,7 +284,7 @@ export class Client
 
     this.refrestTimeout = setTimeout(
       () => this.refreshAccessToken(),
-      data.expires_in - 5000,
+      data.expires_in - 5000
     );
   }
 
@@ -306,7 +325,7 @@ export class Client
             code,
           }),
         })
-      ).json(),
+      ).json()
     );
   }
 
@@ -320,7 +339,7 @@ export class Client
    */
   async subscribe(
     event: Exclude<RPC_EVT, "READY" | "ERROR">,
-    args?: any,
+    args?: any
   ): Promise<{ unsubscribe: () => void }> {
     await this.requestWithError("SUBSCRIBE", args, event);
     return {
@@ -345,10 +364,10 @@ export class Client
           reject(
             new RPCError(
               CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_TIMEOUT,
-              "Connection timed out",
-            ),
+              "Connection timed out"
+            )
           ),
-        10e3,
+        10e3
       );
 
       this.once("connected", () => {
@@ -361,16 +380,16 @@ export class Client
           promise.reject(
             new RPCError(
               CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED,
-              "Connection ended",
-            ),
+              "Connection ended"
+            )
           );
         });
         this.emit("disconnected");
         reject(
           new RPCError(
             CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED,
-            "[RPC_CONNECTION_ENDED]: Connection ended",
-          ),
+            "[RPC_CONNECTION_ENDED]: Connection ended"
+          )
         );
       });
 
