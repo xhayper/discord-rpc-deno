@@ -4,7 +4,7 @@ import {
   UserPremiumType,
   PresenceUpdateStatus,
   GatewayActivity,
-} from "../deps.ts";
+} from "../../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 

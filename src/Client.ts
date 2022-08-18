@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { EventEmitter } from "./deps.ts";
-import { APIApplication, OAuth2Scopes } from "./deps.ts";
+import { EventEmitter, APIApplication, OAuth2Scopes } from "../deps.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
 import {
   CommandIncoming,

@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { EventEmitter } from "../deps.ts";
+import { EventEmitter } from "../../deps.ts";
 import { Client } from "../Client.ts";
 import { TypedEmitter } from "../utils/TypedEmitter.ts";
 
