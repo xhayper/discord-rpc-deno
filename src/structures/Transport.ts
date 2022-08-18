@@ -260,7 +260,8 @@ export type TransportOptions = {
   client: Client;
 };
 
-export abstract class Transport extends (EventEmitter as new () => TypedEmitter<TransportEvents>) {
+export abstract class Transport
+  extends (EventEmitter as new () => TypedEmitter<TransportEvents>) {
   readonly client: Client;
 
   constructor(options: TransportOptions) {

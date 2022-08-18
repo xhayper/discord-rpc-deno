@@ -1,5 +1,5 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
-import { Buffer, path, fs, net } from "../../deps.ts";
+import { Buffer, fs, net, path } from "../../deps.ts";
 import { Transport, TransportOptions } from "../structures/Transport.ts";
 
 export enum IPC_OPCODE {
@@ -112,8 +112,9 @@ export class IPCTransport extends Transport {
         ): Promise<net.Socket | null> => {
           const [socketPath, skipCheck] = formatFunc(id);
 
-          if (!skipCheck && !fs.existsSync(path.dirname(socketPath)))
+          if (!skipCheck && !fs.existsSync(path.dirname(socketPath))) {
             return null;
+          }
 
           const socket = await tryCreateSocket(socketPath);
           return socket;
@@ -173,7 +174,7 @@ export class IPCTransport extends Transport {
 
       sizeRemaining = length - jsonData.length;
 
-      if (this.client.debug)
+      if (this.client.debug) {
         console.log(
           `SERVER => CLIENT | Recieved ${
             data.length
@@ -183,6 +184,7 @@ export class IPCTransport extends Transport {
             wholeData.length
           }, Required packet length: ${length + 8}`
         );
+      }
 
       if (sizeRemaining && sizeRemaining > 0) {
         chunk = wholeData;
@@ -198,11 +200,12 @@ export class IPCTransport extends Transport {
         data: length > 0 ? JSON.parse(jsonData.toString()) : null, // Should not error at all, If it does, open an Issue on GitHub.
       };
 
-      if (this.client.debug)
+      if (this.client.debug) {
         console.debug(
           `SERVER => CLIENT | OPCODE.${IPC_OPCODE[packet.op]} |`,
           packet.data
         );
+      }
 
       switch (packet.op) {
         case IPC_OPCODE.FRAME: {
@@ -229,8 +232,9 @@ export class IPCTransport extends Transport {
   }
 
   send(message?: any, op: IPC_OPCODE = IPC_OPCODE.FRAME): void {
-    if (this.client.debug)
+    if (this.client.debug) {
       console.debug(`CLIENT => SERVER | OPCODE.${IPC_OPCODE[op]} |`, message);
+    }
 
     const dataBuffer = message
       ? Buffer.from(JSON.stringify(message))

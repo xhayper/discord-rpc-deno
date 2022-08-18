@@ -60,7 +60,7 @@ export class Channel extends Base {
     this.position = props.position;
     this.voice_states = props.voice_states;
     this.messages = props.messages?.map(
-      (messgeData: any) => new Message(client, messgeData)
+      (messgeData: any) => new Message(client, messgeData),
     );
   }
 }

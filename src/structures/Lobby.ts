@@ -56,7 +56,7 @@ export class Lobby extends Base {
     owner_id?: string,
     capacity?: number,
     locked?: boolean,
-    metadata?: any
+    metadata?: any,
   ): Promise<void> {
     this.type = type ?? this.type;
     this.owner_id = owner_id ?? this.owner_id;
