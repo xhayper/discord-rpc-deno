@@ -24,7 +24,7 @@ NOTE: Require `--unstable --allow-read --allow-env --allow-write --allow-net`!
 ## Example
 
 ```ts
-import { Client } from "https://deno.land/x/discord_rpc_deno@0.0.7-beta/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@1.0.0/mod.ts";
 
 const client = new Client({
   clientId: "123456789012345678",
@@ -48,11 +48,6 @@ client.login();
 | Linux   | Y      | Y    |
 
 - Linux is tested on Kubuntu 22.04
-
-## Missing Features, Need someone to contribute
-
-- Automatically update data object (use Event Subscription)
-- Undocumented methods
 
 ## Credits
 
