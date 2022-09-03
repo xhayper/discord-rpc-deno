@@ -369,6 +369,7 @@ export class Client
           ),
         10e3,
       );
+      Deno.unrefTimer(timeout);
 
       this.once("connected", () => {
         clearTimeout(timeout);
