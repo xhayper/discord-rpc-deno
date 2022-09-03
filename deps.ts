@@ -1,11 +1,11 @@
-export { Buffer } from "https://deno.land/std@0.152.0/node/buffer.ts"; // TODO: Stop using node!
-export { EventEmitter } from "https://deno.land/std@0.152.0/node/events.ts"; // TODO: Stop using node!
-export { grantOrThrow } from "https://deno.land/std@0.152.0/permissions/mod.ts";
+export { Buffer } from "https://deno.land/std@0.154.0/node/buffer.ts"; // TODO: Stop using node!
+export { EventEmitter } from "https://deno.land/std@0.154.0/node/events.ts"; // TODO: Stop using node!
+export { grantOrThrow } from "https://deno.land/std@0.154.0/permissions/mod.ts";
 
-export * as net from "https://deno.land/std@0.152.0/node/net.ts"; // TODO: Stop using node!
-export * as path from "https://deno.land/std@0.152.0/path/mod.ts";
-export * as fs from "https://deno.land/std@0.152.0/fs/mod.ts";
-export * as log from "https://deno.land/std@0.152.0/log/mod.ts";
+export * as net from "https://deno.land/std@0.154.0/node/net.ts"; // TODO: Stop using node!
+export * as path from "https://deno.land/std@0.154.0/path/mod.ts";
+export * as fs from "https://deno.land/std@0.154.0/fs/mod.ts";
+export * as log from "https://deno.land/std@0.154.0/log/mod.ts";
 
 export type {
   ActivityType,
@@ -21,4 +21,4 @@ export type {
   PresenceUpdateStatus,
   UserFlags,
   UserPremiumType,
-} from "https://deno.land/x/discord_api_types@0.37.2/v10.ts";
+} from "https://deno.land/x/discord_api_types@0.37.5/v10.ts";
