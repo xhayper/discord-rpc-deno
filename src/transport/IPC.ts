@@ -180,6 +180,11 @@ export class IPCTransport extends Transport {
             remainingData?.length ?? 0
           } bytes | Whole packet length: ${wholeData.length}, Required packet length: ${
             length + 8
+          } | Packet data: ${
+            jsonData
+              .toString("hex")
+              .match(/.{1,2}/g)
+              ?.join(" ")
           }`,
         );
       }
