@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { GatewayVoiceState } from "../../deps.ts";
+import type { GatewayVoiceState } from "../../deps.ts";
 import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 import { User } from "./User.ts";

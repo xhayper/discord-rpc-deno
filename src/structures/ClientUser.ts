@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { ActivityType, GatewayActivityButton } from "../../deps.ts";
+import type { ActivityType, GatewayActivityButton } from "../../deps.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";

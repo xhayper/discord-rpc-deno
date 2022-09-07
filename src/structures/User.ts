@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import {
+import type {
   GatewayActivity,
   PresenceUpdateStatus,
   UserFlags,
