@@ -39,7 +39,7 @@ client.on("ready", () => {
 client.login();
 ```
 
-## Complatibility
+## Compatibility
 
 | OS      | Normal | Snap | flatpak |
 | ------- | ------ | ---- | ------- |
