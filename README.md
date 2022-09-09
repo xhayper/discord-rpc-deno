@@ -41,7 +41,7 @@ client.login();
 
 ## Compatibility
 
-| OS      | Normal | Snap | flatpak |
+| OS      | Normal | snap | flatpak |
 | ------- | ------ | ---- | ------- |
 | Windows | Y      | -    | -       |
 | macOS   | Y      | -    | -       |
@@ -54,9 +54,9 @@ client.login();
 - [discordjs](https://github.com/discordjs): Making
   [discordjs/RPC](https://github.com/discordjs/RPC)
 - [JakeMakesStuff](https://github.com/JakeMakesStuff):
-  [Snap Support](https://github.com/discordjs/RPC/pull/152)
+  [snap support](https://github.com/discordjs/RPC/pull/152)
 - [Snazzah](https://github.com/Snazzah):
-  [Snap Support](https://github.com/Snazzah/SublimeDiscordRP/blob/c13e60cdbc5de8147881bb232f2339722c2b46b4/discord_ipc/__init__.py#L208)
+  [snap + flatpak support](https://github.com/Snazzah/SublimeDiscordRP/blob/c13e60cdbc5de8147881bb232f2339722c2b46b4/discord_ipc/__init__.py#L208)
 - [leonardssh](https://github.com/leonardssh): Making
   [coc-discord-rpc](https://github.com/leonardssh/coc-discord-rpc) which
   inspried me to make this package due to how old
