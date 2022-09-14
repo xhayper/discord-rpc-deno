@@ -1,11 +1,11 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
+import { Buffer, fs, net, path } from "../../deps.ts";
+import { RPCError } from "../utils/RPCError.ts";
 import {
   CUSTOM_RPC_ERROR_CODE,
   Transport,
   TransportOptions,
 } from "../structures/Transport.ts";
-import { Buffer, fs, net, path } from "../../deps.ts";
-import { RPCError } from "../utils/RPCError.ts";
 
 export enum IPC_OPCODE {
   HANDSHAKE,
