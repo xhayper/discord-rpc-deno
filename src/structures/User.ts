@@ -1,12 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
+import { Client } from "../Client.ts";
+import { Base } from "./Base.ts";
 import type {
   GatewayActivity,
   PresenceUpdateStatus,
   UserFlags,
   UserPremiumType,
 } from "../../deps.ts";
-import { Client } from "../Client.ts";
-import { Base } from "./Base.ts";
 
 export class User extends Base {
   /**

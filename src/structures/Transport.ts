@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
+import { TypedEmitter } from "../utils/TypedEmitter.ts";
 import { EventEmitter } from "../../deps.ts";
 import { Client } from "../Client.ts";
-import { TypedEmitter } from "../utils/TypedEmitter.ts";
 
 export enum RPC_CLOSE_CODE {
   RPC_CLOSE_NORMAL = 1000,
@@ -104,6 +104,7 @@ export enum RPC_ERROR_CODE {
 export enum CUSTOM_RPC_ERROR_CODE {
   RPC_CONNECTION_ENDED,
   RPC_CONNECTION_TIMEOUT,
+  RPC_COULD_NOT_CONNECT,
 }
 
 export type RPC_CMD =
@@ -253,7 +254,7 @@ export type TransportEvents = {
   /**
    * @event
    */
-  close: () => void;
+  close: (reason: string | { code: number; message: string }) => void;
 };
 
 export type TransportOptions = {

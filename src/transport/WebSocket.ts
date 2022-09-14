@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any no-async-promise-executor
-import { Transport } from "../structures/Transport.ts";
+import { CUSTOM_RPC_ERROR_CODE, Transport } from "../structures/Transport.ts";
+import { RPCError } from "../utils/RPCError.ts";
 
 export class WebSocketTransport extends Transport {
   private ws?: WebSocket;
@@ -36,7 +37,14 @@ export class WebSocketTransport extends Transport {
         }
       }
 
-      if (!this.ws) reject(new Error("Failed to connect to websocket"));
+      if (!this.ws) {
+        reject(
+          new RPCError(
+            CUSTOM_RPC_ERROR_CODE.RPC_COULD_NOT_CONNECT,
+            "Failed to connect to websocket",
+          ),
+        );
+      }
 
       this.ws!.onmessage = (event) => {
         this.emit("message", JSON.parse(event.data.toString()));
@@ -44,7 +52,7 @@ export class WebSocketTransport extends Transport {
 
       this.ws!.onclose = (event) => {
         if (!event.wasClean) return;
-        this.emit("close");
+        this.emit("close", { code: event.code, message: event.reason });
       };
 
       this.ws!.onerror = () => {
@@ -67,7 +75,7 @@ export class WebSocketTransport extends Transport {
 
   close(): Promise<void> {
     return new Promise((resolve) => {
-      this.once("close", resolve);
+      this.once("close", () => resolve());
       this.ws?.close();
     });
   }

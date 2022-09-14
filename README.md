@@ -21,10 +21,16 @@ Looking for NodeJS version? Check
 
 NOTE: Require `--unstable --allow-read --allow-env --allow-write --allow-net`!
 
+## Features
+
+- flatpak / snap support
+- Proper Error exception
+- Up-To-Date with Discord IPC's Command
+
 ## Example
 
 ```ts
-import { Client } from "https://deno.land/x/discord_rpc_deno@1.0.2/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@1.0.3/mod.ts";
 
 const client = new Client({
   clientId: "123456789012345678",

@@ -1,11 +1,11 @@
 // deno-lint-ignore-file no-explicit-any
 import type { ActivityType, GatewayActivityButton } from "../../deps.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
+import { VoiceSettings } from "./VoiceSettings.ts";
+import { Lobby, LobbyType } from "./Lobby.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
-import { Lobby, LobbyType } from "./Lobby.ts";
 import { User } from "./User.ts";
-import { VoiceSettings } from "./VoiceSettings.ts";
 
 export type SetActivity = {
   state?: string;
@@ -43,7 +43,7 @@ export class ClientUser extends User {
   async fetchUser(userId: string): Promise<User> {
     return new User(
       this.client,
-      (await this.client.requestWithError("GET_USER", { id: userId })).data,
+      (await this.client.request("GET_USER", { id: userId })).data,
     );
   }
 
@@ -58,7 +58,7 @@ export class ClientUser extends User {
     return new Guild(
       this.client,
       (
-        await this.client.requestWithError("GET_GUILD", {
+        await this.client.request("GET_GUILD", {
           guild_id: guildId,
           timeout,
         })
@@ -71,7 +71,7 @@ export class ClientUser extends User {
    * @returns the guilds the user is in
    */
   async fetchGuilds(): Promise<Guild[]> {
-    return (await this.client.requestWithError("GET_GUILDS")).data.guilds.map(
+    return (await this.client.request("GET_GUILDS")).data.guilds.map(
       (guildData: any) => new Guild(this.client, guildData),
     );
   }
@@ -85,7 +85,7 @@ export class ClientUser extends User {
     return new Channel(
       this.client,
       (
-        await this.client.requestWithError("GET_CHANNEL", {
+        await this.client.request("GET_CHANNEL", {
           channel_id: channelId,
         })
       ).data,
@@ -99,7 +99,7 @@ export class ClientUser extends User {
    */
   async fetchChannels(guildId: string): Promise<Channel> {
     return (
-      await this.client.requestWithError("GET_CHANNELS", { guild_id: guildId })
+      await this.client.request("GET_CHANNELS", { guild_id: guildId })
     ).data.channels.map(
       (channelData: any) => new Channel(this.client, channelData),
     );
@@ -110,7 +110,7 @@ export class ClientUser extends User {
    * @returns the client's current voice channel, `null` if none
    */
   async getSelectedVoiceChannel(): Promise<Channel | null> {
-    const response = await this.client.requestWithError(
+    const response = await this.client.request(
       "GET_SELECTED_VOICE_CHANNEL",
     );
     return response.data != null
@@ -133,7 +133,7 @@ export class ClientUser extends User {
     return new Channel(
       this.client,
       (
-        await this.client.requestWithError("SELECT_VOICE_CHANNEL", {
+        await this.client.request("SELECT_VOICE_CHANNEL", {
           channel_id: channelId,
           timeout,
           force,
@@ -148,7 +148,7 @@ export class ClientUser extends User {
    * @param force - forces a user to join a voice channel
    */
   async leaveVoiceChannel(timeout?: number, force?: boolean): Promise<void> {
-    await this.client.requestWithError("SELECT_VOICE_CHANNEL", {
+    await this.client.request("SELECT_VOICE_CHANNEL", {
       channel_id: null,
       timeout,
       force,
@@ -162,7 +162,7 @@ export class ClientUser extends User {
   async getVoiceSettings(): Promise<VoiceSettings> {
     return new VoiceSettings(
       this.client,
-      (await this.client.requestWithError("GET_VOICE_SETTINGS")).data,
+      (await this.client.request("GET_VOICE_SETTINGS")).data,
     );
   }
 
@@ -177,7 +177,7 @@ export class ClientUser extends User {
     return new VoiceSettings(
       this.client,
       (
-        await this.client.requestWithError("SET_VOICE_SETTINGS", voiceSettings)
+        await this.client.request("SET_VOICE_SETTINGS", voiceSettings)
       ).data,
     );
   }
@@ -188,7 +188,7 @@ export class ClientUser extends User {
    * @returns
    */
   async setCeritfiedDevices(devices: CertifiedDevice[]): Promise<void> {
-    await this.client.requestWithError("SET_CERTIFIED_DEVICES", { devices });
+    await this.client.request("SET_CERTIFIED_DEVICES", { devices });
   }
 
   /**
@@ -196,7 +196,7 @@ export class ClientUser extends User {
    * @param userId - the id of the requesting user
    */
   async sendJoinInvite(userId: string): Promise<void> {
-    await this.client.requestWithError("SEND_ACTIVITY_JOIN_INVITE", {
+    await this.client.request("SEND_ACTIVITY_JOIN_INVITE", {
       user_id: userId,
     });
   }
@@ -206,7 +206,7 @@ export class ClientUser extends User {
    * @param userId - the id of the requesting user
    */
   async closeJoinRequest(userId: string): Promise<void> {
-    await this.client.requestWithError("CLOSE_ACTIVITY_JOIN_REQUEST", {
+    await this.client.request("CLOSE_ACTIVITY_JOIN_REQUEST", {
       user_id: userId,
     });
   }
@@ -224,7 +224,7 @@ export class ClientUser extends User {
     return new Channel(
       this.client,
       (
-        await this.client.requestWithError("SELECT_TEXT_CHANNEL", {
+        await this.client.request("SELECT_TEXT_CHANNEL", {
           channel_id: channelId,
           timeout,
         })
@@ -237,7 +237,7 @@ export class ClientUser extends User {
    * @param timeout - asynchronously join channel with time to wait before timing out
    */
   async leaveTextChannel(timeout?: number): Promise<void> {
-    await this.client.requestWithError("SELECT_TEXT_CHANNEL", {
+    await this.client.request("SELECT_TEXT_CHANNEL", {
       channel_id: null,
       timeout,
     });
@@ -344,7 +344,7 @@ export class ClientUser extends User {
     delete formattedAcitivity["matchSecret"];
 
     return (
-      await this.client.requestWithError("SET_ACTIVITY", {
+      await this.client.request("SET_ACTIVITY", {
         pid: pid ?? Deno.pid,
         activity: formattedAcitivity,
       })
@@ -357,7 +357,7 @@ export class ClientUser extends User {
    * @param pid - the application's process id
    */
   async clearActivity(pid?: number): Promise<void> {
-    await this.client.requestWithError("SET_ACTIVITY", {
+    await this.client.request("SET_ACTIVITY", {
       pid: pid ?? Deno.pid,
     });
   }
@@ -382,7 +382,7 @@ export class ClientUser extends User {
     return new Lobby(
       this.client,
       (
-        await this.client.requestWithError("CREATE_LOBBY", {
+        await this.client.request("CREATE_LOBBY", {
           type,
           capacity,
           locked,
@@ -402,7 +402,7 @@ export class ClientUser extends User {
     return new Lobby(
       this.client,
       (
-        await this.client.requestWithError("CONNECT_TO_LOBBY", {
+        await this.client.request("CONNECT_TO_LOBBY", {
           id: lobbyId,
           secret,
         })
@@ -420,7 +420,7 @@ export class ClientUser extends User {
     return new Lobby(
       this.client,
       (
-        await this.client.requestWithError("SEND_TO_LOBBY", {
+        await this.client.request("SEND_TO_LOBBY", {
           lobby_id: lobbyId,
           data,
         })
@@ -441,7 +441,7 @@ export class ClientUser extends User {
     size: 16 | 32 | 64 | 128 | 256 | 512 | 1024 = 1024,
   ): Promise<string> {
     return (
-      await this.client.requestWithError("GET_IMAGE", {
+      await this.client.request("GET_IMAGE", {
         type: "user",
         id: userId,
         format,

@@ -1,8 +1,12 @@
 // deno-lint-ignore-file no-explicit-any
+import { FormatFunction, IPCTransport } from "./transport/IPC.ts";
 import type { APIApplication, OAuth2Scopes } from "../deps.ts";
+import { WebSocketTransport } from "./transport/WebSocket.ts";
+import { ClientUser } from "./structures/ClientUser.ts";
+import { TypedEmitter } from "./utils/TypedEmitter.ts";
+import { RPCError } from "./utils/RPCError.ts";
 import { EventEmitter } from "../deps.ts";
 import { log } from "../deps.ts";
-import { ClientUser } from "./structures/ClientUser.ts";
 import {
   CommandIncoming,
   CUSTOM_RPC_ERROR_CODE,
@@ -12,10 +16,6 @@ import {
   Transport,
   TransportOptions,
 } from "./structures/Transport.ts";
-import { FormatFunction, IPCTransport } from "./transport/IPC.ts";
-import { WebSocketTransport } from "./transport/WebSocket.ts";
-import { RPCError } from "./utils/RPCError.ts";
-import { TypedEmitter } from "./utils/TypedEmitter.ts";
 
 export type AuthorizeOptions = {
   scopes: (OAuth2Scopes | `${OAuth2Scopes}`)[];
@@ -139,7 +139,11 @@ export class Client
   private connectionPromise?: Promise<void>;
   private _nonceMap = new Map<
     string,
-    { resolve: (value?: any) => void; reject: (reason?: any) => void }
+    {
+      resolve: (value?: any) => void;
+      reject: (reason?: any) => void;
+      error: RPCError;
+    }
   >();
 
   constructor(options: ClientOptions) {
@@ -175,32 +179,20 @@ export class Client
         this.emit("connected");
       } else {
         if (message.nonce && this._nonceMap.has(message.nonce)) {
-          this._nonceMap.get(message.nonce)?.resolve(message);
+          const nonceObj = this._nonceMap.get(message.nonce)!;
+
+          if (message.evt == "ERROR") {
+            nonceObj.error.code = message.data.code;
+            nonceObj.error.message = message.data.message;
+            nonceObj?.reject(nonceObj.error);
+          } else nonceObj?.resolve(message);
+
           this._nonceMap.delete(message.nonce);
         }
 
         this.emit((message as any).evt, message.data);
       }
     });
-  }
-
-  private throwRPCError(ctx: { code: RPC_ERROR_CODE; message?: string }) {
-    throw new RPCError(ctx.code, ctx.message);
-  }
-
-  /**
-   * @hidden
-   */
-  async requestWithError<A = any, D = any>(
-    cmd: RPC_CMD,
-    args?: any,
-    evt?: RPC_EVT,
-  ): Promise<CommandIncoming<A, D>> {
-    const response = await this.request<A, D>(cmd, args, evt);
-
-    if (response.evt == "ERROR") this.throwRPCError(response.data as any);
-
-    return response;
   }
 
   // #region Request Handlers
@@ -238,11 +230,14 @@ export class Client
     args?: any,
     evt?: RPC_EVT,
   ): Promise<CommandIncoming<A, D>> {
+    const error = new RPCError(RPC_ERROR_CODE.RPC_UNKNOWN_ERROR);
+    RPCError.captureStackTrace(error, this.request);
+
     return new Promise((resolve, reject) => {
       const nonce = crypto.randomUUID();
 
       this.transport.send({ cmd, args, evt, nonce });
-      this._nonceMap.set(nonce, { resolve, reject });
+      this._nonceMap.set(nonce, { resolve, reject, error });
     });
   }
 
@@ -252,7 +247,7 @@ export class Client
 
   private async authenticate(): Promise<void> {
     const { application, user } = (
-      await this.requestWithError("AUTHENTICATE", {
+      await this.request("AUTHENTICATE", {
         access_token: this.accessToken ?? "",
       })
     ).data;
@@ -306,7 +301,7 @@ export class Client
     }
 
     const { code } = (
-      await this.requestWithError("AUTHORIZE", {
+      await this.request("AUTHORIZE", {
         scopes: options.scopes,
         client_id: this.clientId,
         rpc_token: options.useRPCToken ? rpcToken : undefined,
@@ -342,12 +337,12 @@ export class Client
     event: Exclude<RPC_EVT, "READY" | "ERROR">,
     args?: any,
   ): Promise<{ unsubscribe: () => void }> {
-    await this.requestWithError("SUBSCRIBE", args, event);
+    await this.request("SUBSCRIBE", args, event);
     return {
       /**
        * Unsubscribes from the event
        */
-      unsubscribe: () => this.requestWithError("UNSUBSCRIBE", args, event),
+      unsubscribe: () => this.request("UNSUBSCRIBE", args, event),
     };
   }
 
@@ -359,17 +354,16 @@ export class Client
   connect(): Promise<void> {
     if (this.connectionPromise) return this.connectionPromise;
 
+    const error = new RPCError(RPC_ERROR_CODE.RPC_UNKNOWN_ERROR);
+    RPCError.captureStackTrace(error, this.connect);
+
     this.connectionPromise = new Promise((resolve, reject) => {
-      const timeout = setTimeout(
-        () =>
-          reject(
-            new RPCError(
-              CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_TIMEOUT,
-              "Connection timed out",
-            ),
-          ),
-        10e3,
-      );
+      const timeout = setTimeout(() => {
+        error.code = CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_TIMEOUT;
+        error.message = "Connection timed out";
+
+        reject(error);
+      }, 10e3);
       Deno.unrefTimer(timeout);
 
       this.once("connected", () => {
@@ -377,22 +371,20 @@ export class Client
         resolve();
       });
 
-      this.transport.once("close", () => {
+      this.transport.once("close", (reason) => {
+        error.code = typeof reason == "object"
+          ? reason!.code
+          : CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED;
+        error.message = typeof reason == "object"
+          ? reason!.message
+          : reason ?? "Connection ended";
+
         this._nonceMap.forEach((promise) => {
-          promise.reject(
-            new RPCError(
-              CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED,
-              "Connection ended",
-            ),
-          );
+          promise.reject(error);
         });
+
         this.emit("disconnected");
-        reject(
-          new RPCError(
-            CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED,
-            "[RPC_CONNECTION_ENDED]: Connection ended",
-          ),
-        );
+        reject(error);
       });
 
       this.transport.connect();
