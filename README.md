@@ -6,10 +6,14 @@
     <p>
         <a href="https://deno.land/x/discord_rpc_deno"><img src="https://img.shields.io/github/v/release/xhayper/discord-rpc-deno?include_prereleases&label=deno&logo=deno" alt="deno"/></a>
         <a href="https://discord.com/invite/xTAR8nUs2g" target="_blank"><img src="https://img.shields.io/discord/965168309731487805.svg" alt="discord"/></a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fxhayper%2Fdiscord-rpc-deno?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fxhayper%2Fdiscord-rpc-deno.svg?type=shield"/></a>
         <a href="https://github.com/xhayper/discord-rpc-deno/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/xhayper/discord-rpc-deno.svg" alt="license"/></a>
     </p>
 </div>
 <!-- markdownlint-enable -->
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fxhayper%2Fdiscord-rpc-deno.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fxhayper%2Fdiscord-rpc-deno?ref=badge_large)
 
 ## About
 
