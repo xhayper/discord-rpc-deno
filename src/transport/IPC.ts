@@ -1,6 +1,11 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
+import {
+  CUSTOM_RPC_ERROR_CODE,
+  Transport,
+  TransportOptions,
+} from "../structures/Transport.ts";
 import { Buffer, fs, net, path } from "../../deps.ts";
-import { Transport, TransportOptions } from "../structures/Transport.ts";
+import { RPCError } from "../utils/RPCError.ts";
 
 export enum IPC_OPCODE {
   HANDSHAKE,
@@ -137,7 +142,12 @@ export class IPCTransport extends Transport {
         }
       }
 
-      reject(new Error("Could not connect"));
+      reject(
+        new RPCError(
+          CUSTOM_RPC_ERROR_CODE.RPC_COULD_NOT_CONNECT,
+          "Could not connect",
+        ),
+      );
     });
   }
 
@@ -219,7 +229,7 @@ export class IPCTransport extends Transport {
           break;
         }
         case IPC_OPCODE.CLOSE: {
-          this.emit("close");
+          this.emit("close", packet.data);
           break;
         }
         case IPC_OPCODE.PING: {
@@ -265,7 +275,7 @@ export class IPCTransport extends Transport {
 
   close(): Promise<void> {
     return new Promise((resolve) => {
-      this.once("close", resolve);
+      this.once("close", () => resolve());
       this.send({}, IPC_OPCODE.CLOSE);
       this.socket?.end();
     });
