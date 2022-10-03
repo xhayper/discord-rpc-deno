@@ -135,7 +135,7 @@ export class Client
    */
   origin = "https://localhost";
 
-  private refrestTimeout?: number;
+  private refreshTimeout?: number;
   private connectionPromise?: Promise<void>;
   private _nonceMap = new Map<
     string,
@@ -278,7 +278,8 @@ export class Client
     this.refreshToken = data.refresh_token;
     this.tokenType = data.token_type;
 
-    this.refrestTimeout = setTimeout(
+    if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+    this.refreshTimeout = setTimeout(
       () => this.refreshAccessToken(),
       data.expires_in - 5000,
     );
@@ -413,9 +414,9 @@ export class Client
    * disconnects from the local rpc server
    */
   async destroy(): Promise<void> {
-    if (this.refrestTimeout) {
-      clearTimeout(this.refrestTimeout);
-      this.refrestTimeout = undefined;
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+      this.refreshTimeout = undefined;
     }
 
     await this.transport.close();
