@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
-import { TypedEmitter } from "../utils/TypedEmitter.ts";
+import type { TypedEmitter } from "../utils/TypedEmitter.ts";
 import { EventEmitter } from "../../deps.ts";
-import { Client } from "../Client.ts";
+import { type Client } from "../Client.ts";
 
 export enum RPC_CLOSE_CODE {
   RPC_CLOSE_NORMAL = 1000,

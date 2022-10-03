@@ -2,7 +2,7 @@
 import type { ActivityType, GatewayActivityButton } from "../../deps.ts";
 import { CertifiedDevice } from "./CertifiedDevice.ts";
 import { VoiceSettings } from "./VoiceSettings.ts";
-import { Lobby, LobbyType } from "./Lobby.ts";
+import { Lobby, type LobbyType } from "./Lobby.ts";
 import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
 import { User } from "./User.ts";

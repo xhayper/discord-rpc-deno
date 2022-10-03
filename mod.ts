@@ -12,4 +12,4 @@ export * from "./src/structures/VoiceSettings.ts";
 export * from "./src/structures/Transport.ts";
 export * from "./src/structures/Message.ts";
 
-export * from "./src/transport/IPC.ts";
+export { type FormatFunction } from "./src/transport/IPC.ts";

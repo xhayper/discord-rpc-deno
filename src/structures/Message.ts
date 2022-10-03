@@ -1,8 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
-import { APIAttachment, APIEmbed, MessageType } from "../../deps.ts";
-import { Client } from "../Client.ts";
-import { Base } from "./Base.ts";
+import type { APIAttachment, APIEmbed, MessageType } from "../../deps.ts";
+import { type Client } from "../Client.ts";
 import { User } from "./User.ts";
+import { Base } from "./Base.ts";
 
 export class Message extends Base {
   /**

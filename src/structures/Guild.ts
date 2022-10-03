@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
-import { Client } from "../Client.ts";
+import { type Client } from "../Client.ts";
+import { type User } from "./User.ts";
 import { Base } from "./Base.ts";
-import { User } from "./User.ts";
 
 export class Guild extends Base {
   /**

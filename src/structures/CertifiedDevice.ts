@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { Client } from "../Client.ts";
+import { type Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 
 export enum DeviceType {

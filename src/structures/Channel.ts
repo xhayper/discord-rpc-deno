@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import type { ChannelType, GatewayVoiceState } from "../../deps.ts";
+import { type Client } from "../Client.ts";
 import { Message } from "./Message.ts";
-import { Client } from "../Client.ts";
 import { Base } from "./Base.ts";
 
 export class Channel extends Base {

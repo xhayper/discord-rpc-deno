@@ -1,20 +1,20 @@
 // deno-lint-ignore-file no-explicit-any
-import { FormatFunction, IPCTransport } from "./transport/IPC.ts";
+import { type FormatFunction, IPCTransport } from "./transport/IPC.ts";
 import type { APIApplication, OAuth2Scopes } from "../deps.ts";
 import { WebSocketTransport } from "./transport/WebSocket.ts";
+import type { TypedEmitter } from "./utils/TypedEmitter.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
-import { TypedEmitter } from "./utils/TypedEmitter.ts";
 import { RPCError } from "./utils/RPCError.ts";
 import { EventEmitter } from "../deps.ts";
 import { log } from "../deps.ts";
 import {
-  CommandIncoming,
+  type CommandIncoming,
   CUSTOM_RPC_ERROR_CODE,
-  RPC_CMD,
+  type RPC_CMD,
   RPC_ERROR_CODE,
-  RPC_EVT,
-  Transport,
-  TransportOptions,
+  type RPC_EVT,
+  type Transport,
+  type TransportOptions,
 } from "./structures/Transport.ts";
 
 export type AuthorizeOptions = {
@@ -36,7 +36,7 @@ export interface ClientOptions {
   /**
    * pipe id
    */
-  instanceId?: number;
+  pipeId?: number;
   /**
    * transport configs
    */
@@ -71,7 +71,7 @@ export type ClientEvents = {
   disconnected: () => void;
 };
 
-await log.setup({
+log.setup({
   handlers: {
     console: new log.handlers.ConsoleHandler("DEBUG"),
   },
@@ -97,7 +97,7 @@ export class Client
   /**
    * pipe id
    */
-  instanceId?: number;
+  pipeId?: number;
 
   private accessToken?: string;
   private refreshToken?: string;
@@ -152,7 +152,7 @@ export class Client
     this.clientId = options.clientId;
     this.clientSecret = options.clientSecret;
 
-    this.instanceId = options.instanceId;
+    this.pipeId = options.pipeId;
 
     this.debug = !!options.debug; // Funky Javascript :)
     if (this.debug) this.logger.level = 10;
@@ -203,23 +203,23 @@ export class Client
   async fetch(
     method: string,
     path: string,
-    requst?: { body?: BodyInit; query?: string; headers?: HeadersInit },
+    req?: { body?: BodyInit; query?: string; headers?: HeadersInit },
   ): Promise<Response> {
-    return await fetch(
-      `https://discord.com/api${path}${
-        requst?.query ? new URLSearchParams(requst?.query) : ""
-      }`,
-      {
-        method,
-        body: requst?.body,
-        headers: {
-          ...(requst?.headers ?? {}),
-          ...(this.accessToken
-            ? { Authorization: `${this.tokenType} ${this.accessToken}` }
-            : {}),
-        },
+    const url = new URL(`https://discord.com/api${path}`);
+    if (req?.query) {
+      for (const [key, value] of req.query) url.searchParams.append(key, value);
+    }
+
+    return await fetch(url, {
+      method,
+      body: req?.body,
+      headers: {
+        ...(req?.headers ?? {}),
+        ...(this.accessToken
+          ? { Authorization: `${this.tokenType} ${this.accessToken}` }
+          : {}),
       },
-    );
+    });
   }
 
   /**

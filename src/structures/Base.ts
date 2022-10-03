@@ -1,4 +1,4 @@
-import { Client } from "../Client.ts";
+import { type Client } from "../Client.ts";
 
 export class Base {
   /**
