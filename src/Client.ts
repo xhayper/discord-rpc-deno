@@ -274,10 +274,23 @@ export class Client
   }
 
   private hanleAccessTokenResponse(data: any): void {
+    if (
+      !("access_token" in data) ||
+      !("refresh_token" in data) ||
+      !("expires_in" in data) ||
+      !("token_type" in data)
+    ) {
+      throw new TypeError(
+        `Invalid access token response!\nData: ${
+          JSON.stringify(data, null, 2)
+        }`,
+      );
+    }
+
     this.accessToken = data.access_token;
     this.refreshToken = data.refresh_token;
     this.tokenType = data.token_type;
-    
+
     this.refreshTimeout = setTimeout(
       () => this.refreshAccessToken(),
       data.expires_in,
