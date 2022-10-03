@@ -277,8 +277,7 @@ export class Client
     this.accessToken = data.access_token;
     this.refreshToken = data.refresh_token;
     this.tokenType = data.token_type;
-
-    if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+    
     this.refreshTimeout = setTimeout(
       () => this.refreshAccessToken(),
       data.expires_in,
