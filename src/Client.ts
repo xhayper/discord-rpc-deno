@@ -281,7 +281,7 @@ export class Client
     if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
     this.refreshTimeout = setTimeout(
       () => this.refreshAccessToken(),
-      data.expires_in - 5000,
+      data.expires_in,
     );
   }
 
