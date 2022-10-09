@@ -28,7 +28,7 @@ export class WebSocketTransport extends Transport {
 
             reject();
           };
-        }).catch(() => null);
+        }).catch(() => undefined);
 
         if (ws) {
           this.ws = ws;
@@ -75,7 +75,13 @@ export class WebSocketTransport extends Transport {
 
   close(): Promise<void> {
     return new Promise((resolve) => {
-      this.once("close", () => resolve());
+      if (this.ws) {
+        this.ws.onclose = () => {
+          this.emit("close", "Closed by client");
+          this.ws = undefined;
+          resolve();
+        };
+      }
       this.ws?.close();
     });
   }

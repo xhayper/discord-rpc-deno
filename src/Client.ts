@@ -372,6 +372,8 @@ export class Client
 
     this.connectionPromise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
+        this.connectionPromise = undefined;
+
         error.code = CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_TIMEOUT;
         error.message = "Connection timed out";
 
@@ -380,24 +382,25 @@ export class Client
       Deno.unrefTimer(timeout);
 
       this.once("connected", () => {
-        clearTimeout(timeout);
-        resolve();
-      });
+        this.connectionPromise = undefined;
 
-      this.transport.once("close", (reason) => {
-        error.code = typeof reason == "object"
-          ? reason!.code
-          : CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED;
-        error.message = typeof reason == "object"
-          ? reason!.message
-          : reason ?? "Connection ended";
+        this.transport.once("close", (reason) => {
+          this._nonceMap.forEach((promise) => {
+            promise.error.code = typeof reason == "object"
+              ? reason!.code
+              : CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED;
+            promise.error.message = typeof reason == "object"
+              ? reason!.message
+              : reason ?? "Connection ended";
 
-        this._nonceMap.forEach((promise) => {
-          promise.reject(error);
+            promise.reject(promise.error);
+          });
+
+          this.emit("disconnected");
         });
 
-        this.emit("disconnected");
-        reject(error);
+        clearTimeout(timeout);
+        resolve();
       });
 
       this.transport.connect();
@@ -429,6 +432,7 @@ export class Client
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = undefined;
+      this.refreshToken = undefined;
     }
 
     await this.transport.close();

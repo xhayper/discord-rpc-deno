@@ -225,14 +225,14 @@ export type RPC_EVT =
 
 export interface CommandOutgoing<A = any> {
   cmd: RPC_CMD;
-  nonce: string | null;
+  nonce: string | undefined;
   args: A;
   evt?: RPC_EVT;
 }
 
 export interface CommandIncoming<A = any, D = any> {
   cmd: RPC_CMD;
-  nonce: string | null;
+  nonce: string | undefined;
   args?: A;
   data: D;
   evt?: RPC_EVT;
