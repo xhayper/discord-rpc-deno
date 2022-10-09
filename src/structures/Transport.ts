@@ -265,6 +265,10 @@ export abstract class Transport
   extends (EventEmitter as new () => TypedEmitter<TransportEvents>) {
   readonly client: Client;
 
+  get isConnected(): boolean {
+    return false;
+  }
+
   constructor(options: TransportOptions) {
     super();
     this.client = options.client;

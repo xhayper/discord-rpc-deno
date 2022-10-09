@@ -135,6 +135,10 @@ export class Client
    */
   origin = "https://localhost";
 
+  get isConnected() {
+    return this.transport.isConnected;
+  }
+
   private refreshTimeout?: number;
   private connectionPromise?: Promise<void>;
   private _nonceMap = new Map<

@@ -109,6 +109,10 @@ export class IPCTransport extends Transport {
 
   private socket?: net.Socket;
 
+  get isConnected() {
+    return this.socket != undefined && this.socket.readyState === "open";
+  }
+
   constructor(options: IPCTransportOptions) {
     super(options);
 
@@ -290,13 +294,15 @@ export class IPCTransport extends Transport {
   }
 
   close(): Promise<void> {
+    if (!this.socket) return new Promise((resolve) => void resolve());
+
     return new Promise((resolve) => {
-      this.socket?.once("close", () => {
-        this.socket = undefined;
+      this.socket!.once("close", () => {
         this.emit("close", "Closed by client");
+        this.socket = undefined;
         resolve();
       });
-      this.socket?.end();
+      this.socket!.end();
     });
   }
 }
