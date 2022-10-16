@@ -1,4 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
+// https://www.npmjs.com/package/typed-emitter
 export interface TypedEmitter<
   eventName extends {
     [eventName: string]: (...args: any[]) => void;
