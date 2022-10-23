@@ -70,7 +70,8 @@ export type ClientEvents = {
   debug: (...data: any[]) => void;
 };
 
-export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents>) {
+export class Client
+  extends (EventEmitter as new () => TypedEmitter<ClientEvents>) {
   /**
    * application id
    */
@@ -135,17 +136,16 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
 
     this.pipeId = options.pipeId;
 
-    this.transport =
-      options.transport &&
-      options.transport.type &&
-      options.transport.type != "ipc"
-        ? options.transport.type === "websocket"
-          ? new WebSocketTransport({ client: this })
-          : new options.transport.type({ client: this })
-        : new IPCTransport({
-            client: this,
-            pathList: options.transport?.pathList,
-          });
+    this.transport = options.transport &&
+        options.transport.type &&
+        options.transport.type != "ipc"
+      ? options.transport.type === "websocket"
+        ? new WebSocketTransport({ client: this })
+        : new options.transport.type({ client: this })
+      : new IPCTransport({
+        client: this,
+        pathList: options.transport?.pathList,
+      });
 
     this.transport.on("message", (message) => {
       if (message.cmd === "DISPATCH" && message.evt === "READY") {
@@ -182,7 +182,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   async fetch(
     method: string,
     path: string,
-    req?: { body?: BodyInit; query?: string; headers?: HeadersInit }
+    req?: { body?: BodyInit; query?: string; headers?: HeadersInit },
   ): Promise<Response> {
     const url = new URL(`https://discord.com/api${path}`);
     if (req?.query) {
@@ -207,7 +207,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
   request<A = any, D = any>(
     cmd: RPC_CMD,
     args?: any,
-    evt?: RPC_EVT
+    evt?: RPC_EVT,
   ): Promise<CommandIncoming<A, D>> {
     const error = new RPCError(RPC_ERROR_CODE.RPC_UNKNOWN_ERROR);
     RPCError.captureStackTrace(error, this.request);
@@ -248,7 +248,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
             refresh_token: this.refreshToken ?? "",
           }),
         })
-      ).json()
+      ).json(),
     );
   }
 
@@ -260,7 +260,9 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
       !("token_type" in data)
     ) {
       throw new TypeError(
-        `Invalid access token response!\nData: ${JSON.stringify(data, null, 2)}`
+        `Invalid access token response!\nData: ${
+          JSON.stringify(data, null, 2)
+        }`,
       );
     }
 
@@ -270,7 +272,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
 
     this.refreshTimeout = setTimeout(
       () => this.refreshAccessToken(),
-      data.expires_in
+      data.expires_in,
     );
   }
 
@@ -311,7 +313,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
             code,
           }),
         })
-      ).json()
+      ).json(),
     );
   }
 
@@ -325,7 +327,7 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
    */
   async subscribe(
     event: Exclude<RPC_EVT, "READY" | "ERROR">,
-    args?: any
+    args?: any,
   ): Promise<{ unsubscribe: () => void }> {
     await this.request("SUBSCRIBE", args, event);
     return {
@@ -363,14 +365,12 @@ export class Client extends (EventEmitter as new () => TypedEmitter<ClientEvents
 
         this.transport.once("close", (reason) => {
           this._nonceMap.forEach((promise) => {
-            promise.error.code =
-              typeof reason == "object"
-                ? reason!.code
-                : CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED;
-            promise.error.message =
-              typeof reason == "object"
-                ? reason!.message
-                : reason ?? "Connection ended";
+            promise.error.code = typeof reason == "object"
+              ? reason!.code
+              : CUSTOM_RPC_ERROR_CODE.RPC_CONNECTION_ENDED;
+            promise.error.message = typeof reason == "object"
+              ? reason!.message
+              : reason ?? "Connection ended";
 
             promise.reject(promise.error);
           });
