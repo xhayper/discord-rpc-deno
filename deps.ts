@@ -4,7 +4,6 @@ export { Buffer } from "https://deno.land/std@0.160.0/node/buffer.ts"; // TODO: 
 
 export * as path from "https://deno.land/std@0.160.0/path/mod.ts";
 export * as net from "https://deno.land/std@0.160.0/node/net.ts"; // TODO: Stop using node!
-export * as log from "https://deno.land/std@0.160.0/log/mod.ts";
 
 export type {
   ActivityType,
