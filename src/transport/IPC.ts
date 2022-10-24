@@ -16,7 +16,7 @@ export enum IPC_OPCODE {
 }
 
 export type FormatFunction = (
-  id: number
+  id: number,
 ) => [path: string, skipCheck?: boolean];
 
 export type IPCTransportOptions = {
@@ -39,7 +39,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [path.join(prefix, `discord-ipc-${id}`)];
   },
@@ -51,7 +51,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [path.join(prefix, "snap.discord", `discord-ipc-${id}`)];
   },
@@ -63,7 +63,7 @@ const defaultPathList: FormatFunction[] = [
     const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
 
     const prefix = Deno.realPathSync(
-      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`
+      XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `${path.sep}tmp`,
     );
     return [
       path.join(prefix, "app", "com.discordapp.Discord", `discord-ipc-${id}`),
@@ -129,7 +129,7 @@ export class IPCTransport extends Transport {
         };
 
         const handleSocketId = async (
-          id: number
+          id: number,
         ): Promise<net.Socket | undefined> => {
           const [socketPath, skipCheck] = formatFunc(id);
 
@@ -161,8 +161,8 @@ export class IPCTransport extends Transport {
       reject(
         new RPCError(
           CUSTOM_RPC_ERROR_CODE.RPC_COULD_NOT_CONNECT,
-          "Could not connect"
-        )
+          "Could not connect",
+        ),
       );
     });
   }
@@ -181,7 +181,7 @@ export class IPCTransport extends Transport {
         v: 1,
         client_id: this.client.clientId,
       },
-      IPC_OPCODE.HANDSHAKE
+      IPC_OPCODE.HANDSHAKE,
     );
 
     this.socket.on("readable", () => {
@@ -189,11 +189,13 @@ export class IPCTransport extends Transport {
       if (!data) return;
       this.client.emit(
         "debug",
-        `SERVER => CLIENT | ${data
-          .toString("hex")
-          .match(/.{1,2}/g)
-          ?.join(" ")
-          .toUpperCase()}`
+        `SERVER => CLIENT | ${
+          data
+            .toString("hex")
+            .match(/.{1,2}/g)
+            ?.join(" ")
+            .toUpperCase()
+        }`,
       );
 
       do {
@@ -201,11 +203,13 @@ export class IPCTransport extends Transport {
         if (!chunk) break;
         this.client.emit(
           "debug",
-          `SERVER => CLIENT | ${chunk
-            .toString("hex")
-            .match(/.{1,2}/g)
-            ?.join(" ")
-            .toUpperCase()}`
+          `SERVER => CLIENT | ${
+            chunk
+              .toString("hex")
+              .match(/.{1,2}/g)
+              ?.join(" ")
+              .toUpperCase()
+          }`,
         );
         data = Buffer.concat([data, chunk]);
       } while (true);
@@ -217,7 +221,7 @@ export class IPCTransport extends Transport {
       this.client.emit(
         "debug",
         `SERVER => CLIENT | OPCODE.${IPC_OPCODE[op]} |`,
-        parsedData
+        parsedData,
       );
 
       switch (op) {
@@ -243,11 +247,13 @@ export class IPCTransport extends Transport {
   send(message?: any, op: IPC_OPCODE = IPC_OPCODE.FRAME): void {
     this.client.emit(
       "debug",
-      `| [CLIENT] => [SERVER] | OPCODE.${IPC_OPCODE[op]} | ${JSON.stringify(
-        message,
-        null,
-        2
-      )}`
+      `| [CLIENT] => [SERVER] | OPCODE.${IPC_OPCODE[op]} | ${
+        JSON.stringify(
+          message,
+          null,
+          2,
+        )
+      }`,
     );
 
     const dataBuffer = message
