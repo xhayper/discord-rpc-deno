@@ -133,6 +133,8 @@ export class IPCTransport extends Transport {
         ): Promise<net.Socket | undefined> => {
           const [socketPath, skipCheck] = formatFunc(id);
 
+          if (socketPath.trim() === "") return undefined;
+
           if (!skipCheck && !(await exists(path.dirname(socketPath)))) {
             return;
           }
