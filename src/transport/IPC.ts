@@ -242,6 +242,10 @@ export class IPCTransport extends Transport {
         }
       }
     });
+
+    this.socket.on("close", () => {
+      this.emit("close", "Closed by Discord");
+    });
   }
 
   send(message?: any, op: IPC_OPCODE = IPC_OPCODE.FRAME): void {
