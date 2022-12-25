@@ -56,6 +56,7 @@ export class WebSocketTransport extends Transport {
 
       this.ws!.onclose = (event) => {
         if (!event.wasClean) return;
+        this.ws = undefined;
         this.emit("close", { code: event.code, message: event.reason });
       };
 

@@ -244,6 +244,7 @@ export class IPCTransport extends Transport {
     });
 
     this.socket.on("close", () => {
+      this.socket = undefined;
       this.emit("close", "Closed by Discord");
     });
   }
