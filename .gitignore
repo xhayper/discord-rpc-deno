@@ -121,6 +121,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,visualstudiocode,vim
-
-# test folder (it contain my token)
-test/
