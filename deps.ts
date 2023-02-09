@@ -19,4 +19,4 @@ export type {
   PresenceUpdateStatus,
   UserFlags,
   UserPremiumType,
-} from "https://deno.land/x/discord_api_types@0.37.31/v10.ts";
+} from "https://deno.land/x/discord_api_types@0.37.30/v10.ts";
