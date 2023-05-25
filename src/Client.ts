@@ -382,7 +382,7 @@ export class Client
         resolve();
       });
 
-      this.transport.connect();
+      this.transport.connect().catch(reject);
     });
 
     return this.connectionPromise;
