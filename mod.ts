@@ -4,7 +4,7 @@ grantOrThrow(
   { name: "read" },
   { name: "write" },
   { name: "env" },
-  { name: "net" }
+  { name: "net" },
 );
 
 export * from "./src/Client.ts";
