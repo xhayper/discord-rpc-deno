@@ -19,7 +19,7 @@ assignees: ''
 **Expected behavior** A clear and concise description of what you expected to
 happen.
 
-**Screenshots** If applicable, add screenshots to help explain your problem.
+**Source code** If applicable, add a sample code for us to reproduce the bug.
 
 **(please complete the following information):**
 

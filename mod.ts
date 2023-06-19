@@ -1,5 +1,11 @@
 import { grantOrThrow } from "./deps.ts";
-grantOrThrow({ name: "read" }, { name: "write" }, { name: "env" });
+
+grantOrThrow(
+  { name: "read" },
+  { name: "write" },
+  { name: "env" },
+  { name: "net" }
+);
 
 export * from "./src/Client.ts";
 export * from "./src/structures/ClientUser.ts";

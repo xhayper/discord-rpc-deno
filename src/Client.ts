@@ -1,8 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 import { type FormatFunction, IPCTransport } from "./transport/IPC.ts";
+import type { TypedEventEmitter } from "./utils/TypedEventEmitter.ts";
 import type { APIApplication, OAuth2Scopes } from "../deps.ts";
 import { WebSocketTransport } from "./transport/WebSocket.ts";
-import type { TypedEmitter } from "./utils/TypedEmitter.ts";
 import { ClientUser } from "./structures/ClientUser.ts";
 import { RPCError } from "./utils/RPCError.ts";
 import { EventEmitter } from "../deps.ts";
@@ -71,7 +71,7 @@ export type ClientEvents = {
 };
 
 export class Client
-  extends (EventEmitter as new () => TypedEmitter<ClientEvents>) {
+  extends (EventEmitter as new () => TypedEventEmitter<ClientEvents>) {
   /**
    * application id
    */

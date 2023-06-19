@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import type { TypedEmitter } from "../utils/TypedEmitter.ts";
+import type { TypedEventEmitter } from "../utils/TypedEventEmitter.ts";
 import { EventEmitter } from "../../deps.ts";
 import { type Client } from "../Client.ts";
 
@@ -263,7 +263,7 @@ export type TransportOptions = {
 };
 
 export abstract class Transport
-  extends (EventEmitter as new () => TypedEmitter<TransportEvents>) {
+  extends (EventEmitter as new () => TypedEventEmitter<TransportEvents>) {
   readonly client: Client;
 
   get isConnected(): boolean {
