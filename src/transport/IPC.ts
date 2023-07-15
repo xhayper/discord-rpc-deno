@@ -136,7 +136,7 @@ export class IPCTransport extends Transport {
 
           if (!socketPath || socketPath.trim() === "") return;
 
-          if (!(await exists(path.dirname(socketPath)))) {
+          if (!(await exists(socketPath))) {
             return;
           }
 
