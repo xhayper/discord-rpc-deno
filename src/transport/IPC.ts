@@ -136,7 +136,10 @@ export class IPCTransport extends Transport {
 
           if (!socketPath || socketPath.trim() === "") return;
 
-          if (!(await exists(socketPath))) {
+          if (
+            Deno.build.os !== "windows" &&
+            !(await exists(path.dirname(socketPath)))
+          ) {
             return;
           }
 
