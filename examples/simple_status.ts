@@ -1,4 +1,4 @@
-import { Client } from "https://deno.land/x/discord_rpc_deno@1.0.21/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@1.0.22/mod.ts";
 
 const client = new Client({
   clientId: "123456789012345678",
