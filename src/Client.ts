@@ -175,6 +175,23 @@ export class Client
     });
   }
 
+  /**
+   * For RPC event, make sure to subscribe to the event.
+   */
+  on<E extends keyof ClientEvents>(event: E, listener: ClientEvents[E]): this {
+    return super.on(event, listener);
+  }
+
+  /**
+   * For RPC event, make sure to subscribe to the event.
+   */
+  once<E extends keyof ClientEvents>(
+    event: E,
+    listener: ClientEvents[E],
+  ): this {
+    return super.once(event, listener);
+  }
+
   // #region Request Handlers
 
   /**
