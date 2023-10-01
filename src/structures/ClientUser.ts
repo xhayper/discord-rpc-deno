@@ -24,6 +24,8 @@ export type SetActivity = {
   spectateSecret?: string;
   instance?: boolean;
   buttons?: Array<GatewayActivityButton>;
+  // Doesn't work, juse don't use it
+  type?: ActivityType.Playing | ActivityType.Watching | number;
 };
 
 export type SetActivityResponse = {
@@ -31,7 +33,7 @@ export type SetActivityResponse = {
   buttons?: string[];
   name: string;
   application_id: string;
-  type: ActivityType;
+  type: number;
   metadata: {
     button_urls?: string[];
   };
