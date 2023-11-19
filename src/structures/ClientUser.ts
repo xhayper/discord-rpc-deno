@@ -7,25 +7,80 @@ import { Channel } from "./Channel.ts";
 import { Guild } from "./Guild.ts";
 import { User } from "./User.ts";
 
+export enum ActivitySupportedPlatform {
+  IOS = "ios",
+  ANDROID = "android",
+  WEB = "web",
+}
+
+export enum ActivityPartyPrivacy {
+  PRIVATE = 0,
+  PUBLIC = 1,
+}
+
 export type SetActivity = {
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   state?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   details?: string;
   startTimestamp?: number | Date;
   endTimestamp?: number | Date;
+  /**
+   * Minimum of 1 characters and maximum of 128 characters
+   */
   largeImageKey?: string;
+  /**
+   * Minimum of 1 characters and maximum of 128 characters
+   */
   smallImageKey?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   largeImageText?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   smallImageText?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   partyId?: string;
+  /**
+   * Default: ActivityPartyPrivacy.PRIVATE
+   */
+  partyPrivacy?: ActivityPartyPrivacy;
   partySize?: number;
   partyMax?: number;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   matchSecret?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   joinSecret?: string;
+  /**
+   * Minimum of 2 characters and maximum of 128 characters
+   */
   spectateSecret?: string;
   instance?: boolean;
   buttons?: Array<GatewayActivityButton>;
-  // Doesn't work, juse don't use it
-  type?: ActivityType.Playing | ActivityType.Watching | number;
+  supportedPlatforms?: (
+    | ActivitySupportedPlatform
+    | `${ActivitySupportedPlatform}`
+  )[];
+  /**
+   * Default: ActivityTypes.PLAYING
+   */
+  type?:
+    | ActivityType.Playing
+    | ActivityType.Listening
+    | ActivityType.Watching
+    | number;
 };
 
 export type SetActivityResponse = {
@@ -112,9 +167,7 @@ export class ClientUser extends User {
    * @returns the client's current voice channel, `null` if none
    */
   async getSelectedVoiceChannel(): Promise<Channel | null> {
-    const response = await this.client.request(
-      "GET_SELECTED_VOICE_CHANNEL",
-    );
+    const response = await this.client.request("GET_SELECTED_VOICE_CHANNEL");
     return response.data !== null
       ? new Channel(this.client, response.data)
       : null;
@@ -178,9 +231,7 @@ export class ClientUser extends User {
   ): Promise<VoiceSettings> {
     return new VoiceSettings(
       this.client,
-      (
-        await this.client.request("SET_VOICE_SETTINGS", voiceSettings)
-      ).data,
+      (await this.client.request("SET_VOICE_SETTINGS", voiceSettings)).data,
     );
   }
 
@@ -302,6 +353,9 @@ export class ClientUser extends User {
     }
 
     if (activity.partyId) formattedAcitivity.party.id = activity.partyId;
+    if (activity.partyPrivacy) {
+      formattedAcitivity.party.privacy = activity.partyPrivacy;
+    }
     if (activity.partySize && activity.partyMax) {
       formattedAcitivity.party.size = [activity.partySize, activity.partyMax];
     }
@@ -314,6 +368,10 @@ export class ClientUser extends User {
     }
     if (activity.matchSecret) {
       formattedAcitivity.secrets.match = activity.matchSecret;
+    }
+
+    if (activity.supportedPlatforms) {
+      formattedAcitivity.supported_platforms = activity.supportedPlatforms;
     }
 
     if (Object.keys(formattedAcitivity.assets).length === 0) {
@@ -339,15 +397,17 @@ export class ClientUser extends User {
     delete formattedAcitivity["largeImageText"];
     delete formattedAcitivity["smallImageText"];
     delete formattedAcitivity["partyId"];
+    delete formattedAcitivity["partyPrivacy"];
     delete formattedAcitivity["partySize"];
     delete formattedAcitivity["partyMax"];
     delete formattedAcitivity["joinSecret"];
     delete formattedAcitivity["spectateSecret"];
     delete formattedAcitivity["matchSecret"];
+    delete formattedAcitivity["supportedPlatforms"];
 
     return (
       await this.client.request("SET_ACTIVITY", {
-        pid: pid ?? Deno.pid,
+        pid: pid ?? process ? process.pid ?? 0 : 0,
         activity: formattedAcitivity,
       })
     ).data;

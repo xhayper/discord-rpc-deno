@@ -1,9 +1,9 @@
-export { grantOrThrow } from "https://deno.land/std@0.206.0/permissions/mod.ts";
-export { EventEmitter } from "https://deno.land/std@0.206.0/node/events.ts"; // TODO: Stop using node!
-export { Buffer } from "https://deno.land/std@0.206.0/node/buffer.ts"; // TODO: Stop using node!
+export { grantOrThrow } from "https://deno.land/std@0.207.0/permissions/mod.ts";
+export { EventEmitter } from "https://deno.land/std@0.207.0/node/events.ts"; // TODO: Stop using node!
+export { Buffer } from "https://deno.land/std@0.207.0/node/buffer.ts"; // TODO: Stop using node!
 
-export * as path from "https://deno.land/std@0.206.0/path/mod.ts";
-export * as net from "https://deno.land/std@0.206.0/node/net.ts"; // TODO: Stop using node!
+export * as path from "https://deno.land/std@0.207.0/path/mod.ts";
+export * as net from "https://deno.land/std@0.207.0/node/net.ts"; // TODO: Stop using node!
 
 export type {
   ActivityType,
