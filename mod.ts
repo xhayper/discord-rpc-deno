@@ -53,7 +53,7 @@ if (envPermissionGranted) {
 
   if (status.state === "denied") {
     console.warn(
-      "Failed to request net permission for 'discord.com', OAuth will not work!"
+      "Failed to request net permission for 'discord.com', OAuth will not work!",
     );
   }
 }
