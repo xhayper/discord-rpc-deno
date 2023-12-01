@@ -1,4 +1,4 @@
-let envPermissionGranted = false;
+let _envPermissionGranted = false;
 
 {
   const status = await Deno.permissions.request({ name: "env" });
@@ -7,7 +7,7 @@ let envPermissionGranted = false;
     console.warn("Failed to request env permission, IPC transport!");
   }
 
-  envPermissionGranted = status.state === "granted";
+  _envPermissionGranted = status.state === "granted";
 }
 
 /*
@@ -53,7 +53,7 @@ if (envPermissionGranted) {
 
   if (status.state === "denied") {
     console.warn(
-      "Failed to request net permission for 'discord.com', OAuth will not work!",
+      "Failed to request net permission for 'discord.com', OAuth will not work!"
     );
   }
 }
