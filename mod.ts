@@ -1,11 +1,62 @@
-import { grantOrThrow } from "./deps.ts";
+let envPermissionGranted = false;
 
-grantOrThrow(
-  { name: "read" },
-  { name: "write" },
-  { name: "env" },
-  { name: "net" },
-);
+{
+  const status = await Deno.permissions.request({ name: "env" });
+
+  if (status.state === "denied") {
+    console.warn("Failed to request env permission, IPC transport!");
+  }
+
+  envPermissionGranted = status.state === "granted";
+}
+
+/*
+TODO: Rework this
+
+if (envPermissionGranted) {
+  const { XDG_RUNTIME_DIR, TMPDIR, TMP, TEMP } = Deno.env.toObject();
+  const requiredPath = XDG_RUNTIME_DIR ?? TMPDIR ?? TMP ?? TEMP ?? `/tmp`;
+
+  {
+    const status = await Deno.permissions.request({
+      name: "read",
+      path: requiredPath,
+    });
+
+    if (status.state === "denied") {
+      console.warn(
+        `Failed to request read permission for '${requiredPath}', IPC transport will not work!`
+      );
+    }
+  }
+
+  {
+    const status = await Deno.permissions.request({
+      name: "write",
+      path: requiredPath,
+    });
+
+    if (status.state === "denied") {
+      console.warn(
+        `Failed to request write permission for '${requiredPath}', IPC transport will not work!`
+      );
+    }
+  }
+}
+*/
+
+{
+  const status = await Deno.permissions.request({
+    name: "net",
+    host: "discord.com",
+  });
+
+  if (status.state === "denied") {
+    console.warn(
+      "Failed to request net permission for 'discord.com', OAuth will not work!"
+    );
+  }
+}
 
 export * from "./src/Client.ts";
 export * from "./src/structures/ClientUser.ts";

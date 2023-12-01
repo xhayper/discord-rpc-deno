@@ -1,5 +1,5 @@
 // deno-lint-ignore-file require-await no-async-promise-executor no-explicit-any
-import { Buffer, net, path } from "../../deps.ts";
+import { bytes, net, path } from "../../deps.ts";
 import { RPCError } from "../utils/RPCError.ts";
 import {
   CUSTOM_RPC_ERROR_CODE,
@@ -187,38 +187,34 @@ export class IPCTransport extends Transport {
     );
 
     this.socket.on("readable", () => {
-      let data = this.socket?.read() as Buffer | undefined;
-      if (!data) return;
-      this.client.emit(
-        "debug",
-        `SERVER => CLIENT | ${
-          data
-            .toString("hex")
-            .match(/.{1,2}/g)
-            ?.join(" ")
-            .toUpperCase()
-        }`,
-      );
+      let data = new Uint8Array();
 
       do {
-        const chunk = this.socket?.read() as Buffer | undefined;
+        const chunk = this.socket?.read() as Uint8Array;
         if (!chunk) break;
+
         this.client.emit(
           "debug",
-          `SERVER => CLIENT | ${
-            chunk
-              .toString("hex")
-              .match(/.{1,2}/g)
-              ?.join(" ")
-              .toUpperCase()
+          `SERVER => CLIENT | ${data
+            // .toString("hex")
+            // .match(/.{1,2}/g)
+            // ?.join(" ")
+            // .toUpperCase()}`
           }`,
         );
-        data = Buffer.concat([data, chunk]);
+
+        data = bytes.concat([data, chunk]);
       } while (true);
 
-      const op = data.readUInt32LE(0);
-      const length = data.readUInt32LE(4);
-      const parsedData = JSON.parse(data.subarray(8, length + 8).toString());
+      // UInt32LE
+      const op = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
+      // UInt32LE
+      const length = data[4] | (data[5] << 8) | (data[6] << 16) |
+        (data[7] << 24);
+
+      const parsedData = JSON.parse(
+        String.fromCharCode(...data.subarray(8, length + 8)),
+      );
 
       this.client.emit(
         "debug",
@@ -264,14 +260,22 @@ export class IPCTransport extends Transport {
     );
 
     const dataBuffer = message
-      ? Buffer.from(JSON.stringify(message))
-      : Buffer.alloc(0);
+      ? new TextEncoder().encode(JSON.stringify(message))
+      : new Uint8Array();
 
-    const packet = Buffer.alloc(8);
-    packet.writeUInt32LE(op, 0);
-    packet.writeUInt32LE(dataBuffer.length, 4);
+    const packet = new Uint8Array(8);
+    // UInt32LE
+    packet[0] = op;
+    packet[1] = op >> 8;
+    packet[2] = op >> 16;
+    packet[3] = op >> 24;
+    // UInt32LE
+    packet[4] = dataBuffer.length;
+    packet[5] = dataBuffer.length >> 8;
+    packet[6] = dataBuffer.length >> 16;
+    packet[7] = dataBuffer.length >> 24;
 
-    this.socket?.write(Buffer.concat([packet, dataBuffer]));
+    this.socket?.write(bytes.concat([packet, dataBuffer]));
   }
 
   ping(): void {
@@ -279,7 +283,7 @@ export class IPCTransport extends Transport {
   }
 
   close(): Promise<void> {
-    if (!this.socket) return new Promise((resolve) => void resolve());
+    if (!this.socket) return Promise.resolve();
 
     return new Promise((resolve) => {
       this.socket!.once("close", () => {
