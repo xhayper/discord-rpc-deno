@@ -30,7 +30,7 @@ NOTE: Require `--unstable --allow-read --allow-env --allow-write --allow-net`!
 ## Example
 
 ```ts
-import { Client } from "https://deno.land/x/discord_rpc_deno@1.1.1/mod.ts";
+import { Client } from "https://deno.land/x/discord_rpc_deno@1.1.2/mod.ts";
 
 const client = new Client({
   clientId: "123456789012345678",
