@@ -190,6 +190,8 @@ export class IPCTransport extends Transport {
       let data = new Uint8Array();
 
       do {
+        if (!this.isConnected) return;
+
         const chunk = this.socket?.read() as Uint8Array;
         if (!chunk) break;
 
@@ -206,15 +208,35 @@ export class IPCTransport extends Transport {
         data = bytes.concat([data, chunk]);
       } while (true);
 
+      if (data.length < 8) {
+        if (data.length === 0) return;
+        // TODO : Handle error
+        this.client.emit(
+          "debug",
+          "SERVER => CLIENT | Malformed packet, invalid payload",
+        );
+        return;
+      }
+
       // UInt32LE
       const op = data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
       // UInt32LE
       const length = data[4] | (data[5] << 8) | (data[6] << 16) |
         (data[7] << 24);
 
-      const parsedData = JSON.parse(
-        String.fromCharCode(...data.subarray(8, length + 8)),
-      );
+      let parsedData: any;
+      try {
+        parsedData = JSON.parse(
+          String.fromCharCode(...data.subarray(8, length + 8)),
+        );
+      } catch {
+        // TODO : Handle error
+        this.client.emit(
+          "debug",
+          "SERVER => CLIENT | Malformed packet, invalid payload",
+        );
+        return;
+      }
 
       this.client.emit(
         "debug",
