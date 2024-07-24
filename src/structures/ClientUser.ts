@@ -79,7 +79,8 @@ export type SetActivity = {
   type?:
     | ActivityType.Playing
     | ActivityType.Listening
-    | ActivityType.Watching;
+    | ActivityType.Watching
+    | ActivityType.Competing;
 };
 
 export type SetActivityResponse = {
