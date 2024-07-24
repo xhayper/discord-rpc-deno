@@ -1,7 +1,7 @@
 export { EventEmitter } from "node:events"; // TODO: Stop using node!
 
-export * as bytes from "https://deno.land/std@0.210.0/bytes/mod.ts";
-export * as path from "https://deno.land/std@0.210.0/path/mod.ts";
+export * as bytes from "https://deno.land/std@0.224.0/bytes/mod.ts";
+export * as path from "https://deno.land/std@0.224.0/path/mod.ts";
 export * as net from "node:net"; // TODO: Stop using node!
 
 export type {
@@ -18,4 +18,4 @@ export type {
   PresenceUpdateStatus,
   UserFlags,
   UserPremiumType,
-} from "https://deno.land/x/discord_api_types@0.37.66/v10.ts";
+} from "https://deno.land/x/discord_api_types@0.37.93/v10.ts";
